@@ -25,6 +25,19 @@ class CollectionViewItem {
     }
 }
 
+// MARK: - FlowLayoutProtocol
+@objc public protocol FlowLayoutProtocol {
+    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
+    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets
+    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
+    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize
+    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize
+    optional func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView
+    optional func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool
+    optional func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath)
+}
+
 // MARK: - EdamameSection
 public class EdamameSection {
     private var items = [CollectionViewItem]()
@@ -37,10 +50,7 @@ public class EdamameSection {
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
     }
-    public func appendItem(item: AnyObject, cellType: UICollectionViewCell.Type? = nil) {
-        self.items.append(CollectionViewItem(item: item, cellType: cellType ?? self.cellType))
-    }
-    
+
     // MARK: DataSource
     func numberOfItemsInCollectionView(collectionView: UICollectionView) -> Int {
         if self.hidden {
@@ -50,18 +60,16 @@ public class EdamameSection {
         }
     }
 }
+public extension EdamameSection {
+    subscript(index: Int) -> AnyObject {
+        get {
+            return items[index].item
+        }
+    }
 
-// MARK: - EdamameSection : FlowLayoutProtocol
-@objc public protocol FlowLayoutProtocol {
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize
-    optional func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView
-    optional func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool
-    optional func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath)
+    public func appendItem(item: AnyObject, cellType: UICollectionViewCell.Type? = nil) {
+        self.items.append(CollectionViewItem(item: item, cellType: cellType ?? self.cellType))
+    }
 }
 
 extension EdamameSection : FlowLayoutProtocol {
@@ -106,6 +114,25 @@ public class Edamame : NSObject {
 
 // MARK: - Edamame Public Methods
 public extension Edamame {
+    subscript(index: Int) -> EdamameSection {
+        get {
+            if sections.count > index {
+                return self.sections[index]
+            } else {
+                var section = self.createSection()
+                while self.sections.count <= index {
+                    section = self.createSection()
+                }
+                return section
+            }
+        }
+    }
+    subscript(index: NSIndexPath) -> AnyObject {
+        get {
+            return self[index.section][index.item]
+        }
+    }
+
     func createSection(cellType: UICollectionViewCell.Type? = nil) -> EdamameSection {
         let section = EdamameSection(cellType: cellType)
         self.appendSection(section)

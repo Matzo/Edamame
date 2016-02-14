@@ -5,17 +5,26 @@ PODS:
   - FBSnapshotTestCase/Core (2.0.7)
   - FBSnapshotTestCase/SwiftSupport (2.0.7):
     - FBSnapshotTestCase/Core
+  - MirrorObject (0.1.0)
+  - ReactKit (0.12.0):
+    - SwiftTask (~> 4.0.0)
+  - SwiftTask (4.0.0)
 
 DEPENDENCIES:
   - Edamame (from `../`)
   - FBSnapshotTestCase
+  - MirrorObject
+  - ReactKit
 
 EXTERNAL SOURCES:
   Edamame:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Edamame: ae371a7df0500ef8f33ca84801a6e151c2e88af7
+  Edamame: 604d8e4805da275c271969bc4aeaa477cdb7fa7a
   FBSnapshotTestCase: 7e85180d0d141a0cf472352edda7e80d7eaeb547
+  MirrorObject: 2f9f1c23fae9e5bc378e8371086795aabebd7fb8
+  ReactKit: a2b705e8a8674b9cb38b8112c07891df87e8e62b
+  SwiftTask: 724ff63fc8bd9b366d242696d4aff098f6de3c3a
 
 COCOAPODS: 0.39.0

@@ -20,7 +20,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CVD-cX-fs4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-350" y="420"/>
+            <point key="canvasLocation" x="-385" y="299"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
@@ -41,11 +41,20 @@
                                     <action selector="openDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="PXT-ca-tMH"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vre-lE-gMd">
+                                <rect key="frame" x="20" y="122" width="221" height="30"/>
+                                <state key="normal" title="Open ReactDemoViewController"/>
+                                <connections>
+                                    <action selector="openReactDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Cvy-tx-0rO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" id="11d-jw-42A"/>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="hDy-UE-cIe"/>
+                            <constraint firstItem="Vre-lE-gMd" firstAttribute="top" secondItem="hzw-Uf-hhT" secondAttribute="bottom" constant="8" id="ofH-c7-nZS"/>
+                            <constraint firstItem="Vre-lE-gMd" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="wOn-kq-xJm"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="LZZ-s1-DAP"/>

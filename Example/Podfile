@@ -3,6 +3,8 @@ use_frameworks!
 
 target 'Edamame_Example', :exclusive => true do
   pod 'Edamame', :path => '../'
+  pod 'MirrorObject'
+  pod 'ReactKit'
 end
 
 target 'Edamame_Tests', :exclusive => true do
