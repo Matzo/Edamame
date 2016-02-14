@@ -1,0 +1,21 @@
+PODS:
+  - Edamame (0.1.0)
+  - FBSnapshotTestCase (2.0.7):
+    - FBSnapshotTestCase/SwiftSupport (= 2.0.7)
+  - FBSnapshotTestCase/Core (2.0.7)
+  - FBSnapshotTestCase/SwiftSupport (2.0.7):
+    - FBSnapshotTestCase/Core
+
+DEPENDENCIES:
+  - Edamame (from `../`)
+  - FBSnapshotTestCase
+
+EXTERNAL SOURCES:
+  Edamame:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Edamame: ae371a7df0500ef8f33ca84801a6e151c2e88af7
+  FBSnapshotTestCase: 7e85180d0d141a0cf472352edda7e80d7eaeb547
+
+COCOAPODS: 0.39.0
