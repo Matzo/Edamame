@@ -15,6 +15,8 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		D3ECFA09D724D1BDB0B8163B /* Pods_Edamame_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2839FFDAB2D9421CABE72C61 /* Pods_Edamame_Tests.framework */; };
+		F77B3A1C1C7B7924001CD511 /* DemoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */; };
+		F77B3A1E1C7B79FB001CD511 /* DemoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */; };
 		F7C145091C7064230046B4E0 /* ReactDemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C145051C7064230046B4E0 /* ReactDemoCell.swift */; };
 		F7C1450A1C7064230046B4E0 /* ReactDemoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C145061C7064230046B4E0 /* ReactDemoCell.xib */; };
 		F7C1450B1C7064230046B4E0 /* ReactDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C145071C7064230046B4E0 /* ReactDemoViewController.swift */; };
@@ -54,6 +56,8 @@
 		80DCAB6BCFB9FD58543138A1 /* Pods-Edamame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Edamame_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Edamame_Tests/Pods-Edamame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		BF09D770C724BAC5EF92CEF4 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		DBDB6FAE106C4B91ECB3004A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoHeaderView.swift; sourceTree = "<group>"; };
+		F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoHeaderView.xib; sourceTree = "<group>"; };
 		F7C145051C7064230046B4E0 /* ReactDemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactDemoCell.swift; sourceTree = "<group>"; };
 		F7C145061C7064230046B4E0 /* ReactDemoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReactDemoCell.xib; sourceTree = "<group>"; };
 		F7C145071C7064230046B4E0 /* ReactDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactDemoViewController.swift; sourceTree = "<group>"; };
@@ -195,6 +199,8 @@
 				F7C1450F1C70644A0046B4E0 /* DemoCell.xib */,
 				F7C145101C70644A0046B4E0 /* DemoViewController.swift */,
 				F7C145111C70644A0046B4E0 /* DemoViewController.xib */,
+				F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */,
+				F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */,
 			);
 			path = SimpleDemo;
 			sourceTree = "<group>";
@@ -290,6 +296,7 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				F7C145131C70644A0046B4E0 /* DemoCell.xib in Resources */,
+				F77B3A1E1C7B79FB001CD511 /* DemoHeaderView.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				F7C1450A1C7064230046B4E0 /* ReactDemoCell.xib in Resources */,
 				F7C1450C1C7064230046B4E0 /* ReactDemoViewController.xib in Resources */,
@@ -406,6 +413,7 @@
 				F7C145091C7064230046B4E0 /* ReactDemoCell.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				F7C1450B1C7064230046B4E0 /* ReactDemoViewController.swift in Sources */,
+				F77B3A1C1C7B7924001CD511 /* DemoHeaderView.swift in Sources */,
 				F7C145141C70644A0046B4E0 /* DemoViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				F7C145121C70644A0046B4E0 /* DemoCell.swift in Sources */,
