@@ -19,13 +19,13 @@ class DemoCell: UICollectionViewCell, EdamameCell {
         self.backgroundColor = UIColor.greenColor()
     }
     
-    func configure(item: AnyObject, collectionView: UICollectionView, indexPath: NSIndexPath) {
+    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
         guard let user = item as? User else { return }
         
         self.label.text = user.name
     }
 
-    static func sizeForItem(item: AnyObject, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
+    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
         let columns: CGFloat = 4
         let margin: CGFloat = 8
         let width = (collectionView.frame.size.width - (margin * (columns - 1))) / columns

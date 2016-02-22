@@ -39,7 +39,7 @@ class ReactDemoCell : UICollectionViewCell, EdamameCell {
         self.pointStream?.cancel()
     }
     
-    func configure(item: AnyObject, collectionView: UICollectionView, indexPath: NSIndexPath) {
+    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
         guard let user = item as? ReactUser else { return }
         
         let stream = KVO.stream(user, "point") |> map { $0 as! Int }
@@ -52,7 +52,7 @@ class ReactDemoCell : UICollectionViewCell, EdamameCell {
         self.pointLabel.text = "\(user.point)"
     }
 
-    static func sizeForItem(item: AnyObject, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
+    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
         let columns: CGFloat = 3
         let margin: CGFloat = 8
         let width = (collectionView.frame.size.width - (margin * (columns - 1))) / columns

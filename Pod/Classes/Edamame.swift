@@ -10,16 +10,16 @@ import UIKit
 
 // MARK: - EdamameCell
 public protocol EdamameCell {
-    func configure(item: AnyObject, collectionView: UICollectionView, indexPath: NSIndexPath)
-    static func sizeForItem(item: AnyObject, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize
+    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath)
+    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize
 }
 
 class CollectionViewItem {
-    var item: AnyObject
+    var item: Any
     var cellType: UICollectionViewCell.Type
     var size: CGSize = CGSizeZero
     var needsLayout: Bool = true
-    init(item: AnyObject, cellType: UICollectionViewCell.Type) {
+    init(item: Any, cellType: UICollectionViewCell.Type) {
         self.item = item
         self.cellType = cellType
     }
@@ -61,13 +61,13 @@ public class EdamameSection {
     }
 }
 public extension EdamameSection {
-    subscript(index: Int) -> AnyObject {
+    subscript(index: Int) -> Any {
         get {
             return items[index].item
         }
     }
 
-    public func appendItem(item: AnyObject, cellType: UICollectionViewCell.Type? = nil) {
+    public func appendItem(item: Any, cellType: UICollectionViewCell.Type? = nil) {
         self.items.append(CollectionViewItem(item: item, cellType: cellType ?? self.cellType))
     }
 }
@@ -127,7 +127,7 @@ public extension Edamame {
             }
         }
     }
-    subscript(index: NSIndexPath) -> AnyObject {
+    subscript(index: NSIndexPath) -> Any {
         get {
             return self[index.section][index.item]
         }
