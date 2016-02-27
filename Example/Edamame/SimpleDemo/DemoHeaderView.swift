@@ -9,22 +9,15 @@
 import UIKit
 import Edamame
 
-class DemoHeaderView: UICollectionReusableView, EdamameSupplementalyView {
+class DemoHeaderView: UICollectionReusableView, EdamameSupplementaryView {
     @IBOutlet weak var label: UILabel!
 
     func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
-        guard let header = item as? HeaderObj else { return }
+        guard let header = item as? String else { return }
         
-        label.text = header.title
+        label.text = header
     }
     static func sizeForItem(item: Any, collectionView: UICollectionView, section: Int) -> CGSize {
         return CGSizeMake(collectionView.frame.size.width, 44)
-    }
-}
-
-class HeaderObj {
-    var title: String
-    init(title: String) {
-        self.title = title
     }
 }

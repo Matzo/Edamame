@@ -59,11 +59,12 @@ class DemoViewModel: Edamame {
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter)
         self.loadData { (users) -> Void in
-            let section = self.createSection()
-            section.appendSupplementaryItem(HeaderObj(title: "Title Name"), kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
-            section.appendSupplementaryItem(HeaderObj(title: "Footer Name"), kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
+            let section = self[0]
+            section.setCellType(DemoCell.self)
+            section.appendSupplementaryItem("Title Name", kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
+            section.appendSupplementaryItem("Footer Name", kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
             for user in users {
-                section.appendItem(user, cellType: DemoCell.self)
+                section.appendItem(user)
             }
             self.reloadData()
         }
