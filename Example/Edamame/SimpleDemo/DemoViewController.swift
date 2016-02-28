@@ -73,7 +73,7 @@ class DemoViewModel: Edamame {
             
             
             for _ in 0..<5 {
-                section.appendItem(text, cellType: DemoDynamicHeightCell.self, culcSizeInBackground: true)
+                section.appendItem(text, cellType: DemoDynamicHeightCell.self, calculateSizeInBackground: true)
             }
             
             for user in users {
@@ -81,7 +81,7 @@ class DemoViewModel: Edamame {
             }
             
             for _ in 0..<5 {
-                section.appendItem(text, cellType: DemoDynamicHeightCell.self, culcSizeInBackground: true)
+                section.appendItem(text, cellType: DemoDynamicHeightCell.self, calculateSizeInBackground: true)
             }
             
             self.reloadData()

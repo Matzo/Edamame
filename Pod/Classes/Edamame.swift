@@ -36,11 +36,11 @@ class EdamameItem {
     var cellType: UICollectionViewCell.Type
     var size: CGSize = CGSize.zero
     var needsLayout: Bool = true
-    var culcSizeInBackground: Bool = false
-    init(item: Any, cellType: UICollectionViewCell.Type, culcSizeInBackground: Bool = false) {
+    var calculateSizeInBackground: Bool = false
+    init(item: Any, cellType: UICollectionViewCell.Type, calculateSizeInBackground: Bool = false) {
         self.item = item
         self.cellType = cellType
-        self.culcSizeInBackground = culcSizeInBackground
+        self.calculateSizeInBackground = calculateSizeInBackground
     }
 }
 class EdamameSupplementaryItem {
@@ -98,8 +98,8 @@ public extension EdamameSection {
         }
     }
 
-    func appendItem(item: Any, cellType: UICollectionViewCell.Type? = nil, culcSizeInBackground:Bool = false) {
-        let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, culcSizeInBackground: culcSizeInBackground)
+    func appendItem(item: Any, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false) {
+        let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground)
         self.items.append(item)
         
     }
@@ -132,7 +132,7 @@ extension EdamameSection : FlowLayoutProtocol {
 
     @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let item = items[indexPath.item]
-        if item.needsLayout && !item.culcSizeInBackground {
+        if item.needsLayout && !item.calculateSizeInBackground {
             if let cellType = item.cellType as? EdamameCell.Type {
                 item.size = cellType.sizeForItem(item.item, collectionView: collectionView, indexPath: indexPath)
                 item.needsLayout = false
@@ -186,7 +186,7 @@ extension EdamameSection : FlowLayoutProtocol {
 // MARK: - Edamame
 public class Edamame : NSObject {
 
-    let culcSizeQueue = dispatch_queue_create("matzo.Edamame", DISPATCH_QUEUE_SERIAL)
+    let calculateSizeQueue = dispatch_queue_create("matzo.Edamame", DISPATCH_QUEUE_SERIAL)
 
     private var sections = [EdamameSection]()
     private var collectionView: UICollectionView
@@ -258,24 +258,24 @@ public extension Edamame {
                 item.needsLayout = true
             }
         }
-        self.culcSizeInBackground()
+        self.calculateSizeInBackground()
         self.reloadSections(animated: false)
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
     
     func reloadData() {
-        self.culcSizeInBackground()
+        self.calculateSizeInBackground()
         self.collectionView.reloadData()
     }
     
-    func culcSizeInBackground() {
-        dispatch_async(culcSizeQueue) { () -> Void in
+    func calculateSizeInBackground() {
+        dispatch_async(calculateSizeQueue) { () -> Void in
             var needsReload = false
             for sectionIndex in 0..<self.sections.count {
                 let section = self.sections[sectionIndex]
                 for itemIndex in 0..<section.items.count {
                     let item = section.items[itemIndex]
-                    guard item.culcSizeInBackground && item.needsLayout else { continue }
+                    guard item.calculateSizeInBackground && item.needsLayout else { continue }
                     
                     if let cellType = item.cellType as? EdamameCell.Type {
                         let indexPath = NSIndexPath(forItem: sectionIndex, inSection: itemIndex)
