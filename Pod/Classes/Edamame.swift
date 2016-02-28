@@ -30,6 +30,18 @@ public protocol EdamameSupplementaryView {
     func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath)
     static func sizeForItem(item: Any, collectionView: UICollectionView, section: Int) -> CGSize
 }
+public extension EdamameCell {
+    static func calculateSize<T: UICollectionViewCell where T: EdamameCell>(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath, cell: T, width: CGFloat? = nil) -> CGSize {
+        let width = width ?? collectionView.frame.size.width
+
+        cell.configure(item, collectionView: collectionView, indexPath: indexPath)
+        cell.bounds = CGRectMake(0, 0, width, cell.bounds.height)
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
+        
+        return cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+    }
+}
 
 class EdamameItem {
     var item: Any

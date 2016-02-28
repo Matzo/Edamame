@@ -1,5 +1,5 @@
 //
-//  DemoDynamicHeightCell.swift
+//  DemoCalcBackgroundCell.swift
 //  Edamame
 //
 //  Created by Matsuo Keisuke on 2/28/16.
@@ -9,15 +9,14 @@
 import UIKit
 import Edamame
 
-class DemoDynamicHeightCell: UICollectionViewCell, EdamameCell {
-    
+class DemoCalcBackgroundCell: UICollectionViewCell, EdamameCell {
+
     @IBOutlet weak var label: UILabel!
-    
-    static let viewHolder = UINib(nibName: String(DemoDynamicHeightCell.self), bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! DemoDynamicHeightCell
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        self.contentView.backgroundColor = UIColor.yellowColor()
     }
 
     func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
@@ -28,6 +27,10 @@ class DemoDynamicHeightCell: UICollectionViewCell, EdamameCell {
     
     static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
         guard let string = item as? String else { return CGSize.zero }
-        return self.calculateSize(string, collectionView: collectionView, indexPath: indexPath, cell: viewHolder, width: collectionView.frame.size.width)
+
+        NSThread.sleepForTimeInterval(0.1)
+        let bounds = (string as NSString).boundingRectWithSize(CGSize(width: collectionView.frame.size.width, height: CGFloat.max), options: .UsesLineFragmentOrigin, attributes: nil, context: nil)
+
+        return CGSize(width: collectionView.frame.size.width, height: bounds.size.height)
     }
 }

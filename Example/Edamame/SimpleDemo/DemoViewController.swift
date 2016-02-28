@@ -58,6 +58,7 @@ class DemoViewModel: Edamame {
     func setup() {
         self.registerNibFromClass(DemoCell.self)
         self.registerNibFromClass(DemoDynamicHeightCell.self)
+        self.registerNibFromClass(DemoCalcBackgroundCell.self)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter)
         self.loadData { (users) -> Void in
@@ -73,7 +74,7 @@ class DemoViewModel: Edamame {
             
             
             for _ in 0..<5 {
-                section.appendItem(text, cellType: DemoDynamicHeightCell.self, calculateSizeInBackground: true)
+                section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true)
             }
             
             for user in users {
@@ -81,9 +82,16 @@ class DemoViewModel: Edamame {
             }
             
             for _ in 0..<5 {
-                section.appendItem(text, cellType: DemoDynamicHeightCell.self, calculateSizeInBackground: true)
+                section.appendItem(text, cellType: DemoDynamicHeightCell.self)
             }
             
+            for user in users {
+                section.appendItem(user)
+            }
+            
+            section.appendItem(text, cellType: DemoDynamicHeightCell.self)
+            section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true)
+
             self.reloadData()
         }
     }
