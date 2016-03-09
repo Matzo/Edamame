@@ -59,14 +59,12 @@ class ReactDemoViewModel: Edamame {
         self.loadData { (users) -> Void in
             let section = self.createSection()
             for user in users {
-                section.appendItem(user, cellType: ReactDemoCell.self)
+                section.appendItem(user, cellType: ReactDemoCell.self) { (item, indexPath) -> Void in
+                    guard let user = item as? ReactUser else { return }
+                    user.point += 1
+                }
             }
             self.reloadData()
         }
-    }
-    
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        guard let user = self[indexPath] as? ReactUser else { return }
-        user.point += 1
     }
 }

@@ -74,7 +74,10 @@ class DemoViewModel: Edamame {
             
             
             for _ in 0..<5 {
-                section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true)
+                section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true) { (item, indexPath) -> Void in
+                    guard let item = item as? String else { return }
+                    print(item)
+                }
             }
             
             for user in users {
