@@ -34,13 +34,21 @@ public protocol EdamameSupplementaryView {
 public extension EdamameCell {
     static func calculateSize<T: UICollectionViewCell where T: EdamameCell>(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath, cell: T, width: CGFloat? = nil) -> CGSize {
         let width = width ?? collectionView.frame.size.width
+        let widthConstraint = NSLayoutConstraint(item: cell.contentView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1, constant: width)
+        let translatesAutoresizingMaskIntoConstraints = cell.contentView.translatesAutoresizingMaskIntoConstraints
+        cell.contentView.translatesAutoresizingMaskIntoConstraints = false
+        cell.contentView.addConstraint(widthConstraint)
 
         cell.configure(item, collectionView: collectionView, indexPath: indexPath)
         cell.bounds = CGRectMake(0, 0, width, cell.bounds.height)
         cell.setNeedsLayout()
         cell.layoutIfNeeded()
         
-        return cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        let size = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        cell.contentView.removeConstraint(widthConstraint)
+        cell.contentView.translatesAutoresizingMaskIntoConstraints = translatesAutoresizingMaskIntoConstraints
+
+        return size
     }
 }
 
