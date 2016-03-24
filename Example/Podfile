@@ -10,5 +10,5 @@ end
 target 'Edamame_Tests', :exclusive => true do
   pod 'Edamame', :path => '../'
 
-  pod 'FBSnapshotTestCase'
+#  pod 'FBSnapshotTestCase'
 end

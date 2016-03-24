@@ -87,7 +87,10 @@ public class EdamameSection {
     private weak var dataSource: Edamame!
     
     public var hidden: Bool = false
-    
+
+    public func items<T>(type: T.Type) -> [T] {
+        return self.items.filter({$0.item is T}).map({$0.item as! T})
+    }
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
     }
@@ -225,8 +228,13 @@ public class Edamame : NSObject {
 
     let calculateSizeQueue = dispatch_queue_create("matzo.Edamame", DISPATCH_QUEUE_SERIAL)
 
-    private var sections = [EdamameSection]()
+    private var _sections = [EdamameSection]()
     private var collectionView: UICollectionView
+
+    /// readonly
+    public var sections: [EdamameSection] {
+        return _sections
+    }
     
     override init() {
         fatalError("required collectionView")
@@ -273,7 +281,7 @@ public extension Edamame {
     func appendSection(section: EdamameSection) {
         section.section = self.sections.count
         section.dataSource = self
-        self.sections.append(section)
+        self._sections.append(section)
     }
     
     func reloadSections(animated animated: Bool = false) {
@@ -309,7 +317,7 @@ public extension Edamame {
         self[indexPath.section].items.removeAtIndex(indexPath.item)
     }
     func removeAllItems() {
-        self.sections.removeAll()
+        self._sections.removeAll()
     }
     
     func calculateSizeInBackground() {
