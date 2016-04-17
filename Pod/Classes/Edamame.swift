@@ -88,10 +88,16 @@ public class EdamameSection {
     private weak var dataSource: Edamame!
     private var items = [EdamameItem]()
     private var supplementaryItems = [String: EdamameSupplementaryItem]()
-    private var section: Int = 0
     private var cellType: UICollectionViewCell.Type
 
-    public var sectionIndex: Int { return section }
+    public var index: Int {
+        for (index, section) in dataSource.sections.enumerate() {
+            if section === self {
+                return index
+            }
+        }
+        return 0
+    }
     public var hidden: Bool = false
 
     public init(cellType: UICollectionViewCell.Type? = nil) {
@@ -296,7 +302,6 @@ public extension Edamame {
     }
  
     func appendSection(section: EdamameSection) {
-        section.section = self.sections.count
         section.dataSource = self
         self._sections.append(section)
     }
