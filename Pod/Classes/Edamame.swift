@@ -326,10 +326,16 @@ public extension Edamame {
             }
         }
         self.calculateSizeInBackground()
-        self.reloadSections(animated: false)
+        self.reloadSections(animated: false) //
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
- 
+
+    func setNeedsLayout(indexPath: NSIndexPath) {
+        self.sections[indexPath.section].items[indexPath.item].needsLayout = true
+        self.calculateSizeInBackground()
+        self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+
     func reloadData() {
         self.calculateSizeInBackground()
         self.collectionView.reloadData()
