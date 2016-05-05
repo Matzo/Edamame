@@ -5,6 +5,8 @@ target 'Edamame_Example', :exclusive => true do
   pod 'Edamame', :path => '../'
   pod 'MirrorObject'
   pod 'ReactKit'
+  pod 'RxSwift'
+  pod 'RxCocoa'
 end
 
 target 'Edamame_Tests', :exclusive => true do

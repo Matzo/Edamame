@@ -326,7 +326,6 @@ public extension Edamame {
             }
         }
         self.calculateSizeInBackground()
-        self.reloadSections(animated: false) //
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
@@ -453,5 +452,12 @@ public extension Edamame {
         forIndexPath indexPath: NSIndexPath) -> T {
             return collectionView.dequeueReusableSupplementaryViewOfKind(kind,
                 withReuseIdentifier: String(type), forIndexPath: indexPath) as! T
+    }
+}
+
+// MARK: - UICollectionView
+public extension UICollectionView {
+    var edamame: Edamame? {
+        return dataSource as? Edamame ?? delegate as? Edamame
     }
 }
