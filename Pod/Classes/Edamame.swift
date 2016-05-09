@@ -99,7 +99,7 @@ public class EdamameSection {
         return 0
     }
     public var hidden: Bool = false
-    public var inset: UIEdgeInsets = UIEdgeInsetsZero
+    public var inset: UIEdgeInsets?
 
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
@@ -247,7 +247,12 @@ extension EdamameSection : FlowLayoutProtocol {
     }
     
     @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return inset
+        if let inset = inset {
+            return inset
+        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.sectionInset
+        }
+        return UIEdgeInsetsZero
     }
 }
 
