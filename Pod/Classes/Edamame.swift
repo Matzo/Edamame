@@ -146,6 +146,11 @@ public extension EdamameSection {
         self.items.append(item)
  
     }
+
+    func insertItem(item: Any, atIndex: Int, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
+        let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
+        self.items.insert(item, atIndex: atIndex)
+    }
  
     func appendSupplementaryItem(item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
         self.supplementaryItems[kind] = EdamameSupplementaryItem(item: item, viewType: viewType ?? self.cellType)
@@ -295,17 +300,26 @@ public extension Edamame {
         }
     }
 
-    func createSection(cellType: UICollectionViewCell.Type? = nil) -> EdamameSection {
+    func createSection(cellType: UICollectionViewCell.Type? = nil, atIndex index: Int? = nil) -> EdamameSection {
         let section = EdamameSection(cellType: cellType)
-        self.appendSection(section)
+        if let index = index {
+            self.insertSection(section, atIndex: index)
+        } else {
+            self.appendSection(section)
+        }
         return section
     }
- 
+
     func appendSection(section: EdamameSection) {
         section.dataSource = self
         self._sections.append(section)
     }
- 
+
+    func insertSection(section: EdamameSection, atIndex: Int) {
+        section.dataSource = self
+        self._sections.insert(section, atIndex: atIndex)
+    }
+
     func reloadSections(animated animated: Bool = false) {
         if self.sections.count > 0 {
             let range = NSIndexSet(indexesInRange: NSMakeRange(0, self.sections.count))
