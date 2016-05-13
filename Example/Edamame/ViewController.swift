@@ -29,5 +29,10 @@ class ViewController: UIViewController {
         let vc = ReactDemoViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
+
+    @IBAction func openRxDemoViewController() {
+        let vc = RxDemoViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 }
 

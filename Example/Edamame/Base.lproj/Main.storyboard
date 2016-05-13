@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Zyr-op-o8X">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Zyr-op-o8X">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -48,13 +48,22 @@
                                     <action selector="openReactDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Cvy-tx-0rO"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gQ5-ss-O2a">
+                                <rect key="frame" x="20" y="160" width="199" height="30"/>
+                                <state key="normal" title="Open RxDemoViewController"/>
+                                <connections>
+                                    <action selector="openRxDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="GJ9-Ih-IvV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" id="11d-jw-42A"/>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="hDy-UE-cIe"/>
+                            <constraint firstItem="gQ5-ss-O2a" firstAttribute="top" secondItem="Vre-lE-gMd" secondAttribute="bottom" constant="8" id="ioA-ML-uAS"/>
                             <constraint firstItem="Vre-lE-gMd" firstAttribute="top" secondItem="hzw-Uf-hhT" secondAttribute="bottom" constant="8" id="ofH-c7-nZS"/>
                             <constraint firstItem="Vre-lE-gMd" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="wOn-kq-xJm"/>
+                            <constraint firstItem="gQ5-ss-O2a" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="zET-4Q-SaA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="LZZ-s1-DAP"/>

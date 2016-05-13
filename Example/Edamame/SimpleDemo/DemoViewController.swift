@@ -61,6 +61,8 @@ class DemoViewModel: Edamame {
         self.registerNibFromClass(DemoCalcBackgroundCell.self)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter)
+        
+        // Normal cell Demo
         self.loadData { (users) -> Void in
             let section = self[0]
             section.setCellType(DemoCell.self)
@@ -70,8 +72,17 @@ class DemoViewModel: Edamame {
                 section.appendItem(user)
             }
             
-            let text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
+            self.reloadData()
+        }
+        
+        // Calculate in background Demo
+        self.loadData { (users) -> Void in
+            let section = self[1]
+            section.setCellType(DemoCell.self)
+            section.appendSupplementaryItem("Title Name", kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
+            section.appendSupplementaryItem("Footer Name", kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
             
+            let text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
             
             for _ in 0..<5 {
                 section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true) { (item, indexPath) -> Void in
@@ -80,21 +91,37 @@ class DemoViewModel: Edamame {
                 }
             }
             
-            for user in users {
-                section.appendItem(user)
-            }
+            self.reloadData()
+        }
+        
+        // Dynamic Height Demo
+        self.loadData { (users) -> Void in
+            let section = self[2]
+            section.setCellType(DemoCell.self)
+            section.appendSupplementaryItem("Title Name", kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
+            section.appendSupplementaryItem("Footer Name", kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
+            
+            let text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
             
             for _ in 0..<5 {
                 section.appendItem(text, cellType: DemoDynamicHeightCell.self)
             }
             
+            self.reloadData()
+        }
+        
+        // Section Insets Demo
+        self.loadData { (users) -> Void in
+            let section = self[3]
+            section.setCellType(DemoCell.self)
+            section.inset = UIEdgeInsets(top: 32, left: 16, bottom: 32, right: 16)
+            section.appendSupplementaryItem("Title Name", kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
+            section.appendSupplementaryItem("Footer Name", kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
+
             for user in users {
                 section.appendItem(user)
             }
             
-            section.appendItem(text, cellType: DemoDynamicHeightCell.self)
-            section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true)
-
             self.reloadData()
         }
     }

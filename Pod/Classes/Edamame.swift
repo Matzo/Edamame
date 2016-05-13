@@ -99,6 +99,7 @@ public class EdamameSection {
         return 0
     }
     public var hidden: Bool = false
+    public var inset: UIEdgeInsets?
 
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
@@ -249,6 +250,15 @@ extension EdamameSection : FlowLayoutProtocol {
         }
         return view
     }
+    
+    @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        if let inset = inset {
+            return inset
+        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.sectionInset
+        }
+        return UIEdgeInsetsZero
+    }
 }
 
 // MARK: - Edamame
@@ -340,7 +350,6 @@ public extension Edamame {
             }
         }
         self.calculateSizeInBackground()
-        self.reloadSections(animated: false) //
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
@@ -406,6 +415,11 @@ extension Edamame: UICollectionViewDelegateFlowLayout {
         let sectionItem = sections[section]
         return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForFooterInSection: section)
     }
+    
+    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        let sectionItem = sections[section]
+        return sectionItem.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAtIndex: section)
+    }
 
     public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         sections[indexPath.section].items[indexPath.item].selectionHandler?(item: self[indexPath], indexPath: indexPath)
@@ -467,5 +481,12 @@ public extension Edamame {
         forIndexPath indexPath: NSIndexPath) -> T {
             return collectionView.dequeueReusableSupplementaryViewOfKind(kind,
                 withReuseIdentifier: String(type), forIndexPath: indexPath) as! T
+    }
+}
+
+// MARK: - UICollectionView
+public extension UICollectionView {
+    var edamame: Edamame? {
+        return dataSource as? Edamame ?? delegate as? Edamame
     }
 }
