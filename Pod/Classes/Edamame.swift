@@ -496,7 +496,8 @@ public extension UICollectionView {
 
     func isFirstAppearing(indexPath: NSIndexPath) -> Bool {
         guard let sections = self.edamame?._sections where sections.count > indexPath.section else { return false }
-        guard let items = sections[indexPath.section].items as? [EdamameItem] where items.count > indexPath.item else { return false }
-        return items[indexPath.item].isFirstAppearing
+        guard sections[indexPath.section].items.count > indexPath.item else { return false }
+
+        return sections[indexPath.section].items[indexPath.item].isFirstAppearing
     }
 }
