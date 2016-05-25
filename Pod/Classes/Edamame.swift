@@ -62,7 +62,8 @@ class EdamameItem {
     var needsLayout: Bool = true
     var calculateSizeInBackground: Bool = false
     var selectionHandler: EdamameSelectionHandler?
- 
+    var isFirstAppearing: Bool = true
+
     init(item: Any, cellType: UICollectionViewCell.Type, calculateSizeInBackground: Bool = false, selection: EdamameSelectionHandler? = nil) {
         self.item = item
         self.cellType = cellType
@@ -76,6 +77,7 @@ class EdamameSupplementaryItem {
     var viewType: UICollectionReusableView.Type
     var size: CGSize = CGSize.zero
     var needsLayout: Bool = true
+    var isFirstAppearing: Bool = true
  
     init(item: Any, viewType: UICollectionReusableView.Type) {
         self.item = item
@@ -192,6 +194,7 @@ extension EdamameSection : FlowLayoutProtocol {
         let cell = dataSource.dequeueReusableCell(item.cellType.self, forIndexPath: indexPath)
         if let cell = cell as? EdamameCell {
             cell.configure(item.item, collectionView: collectionView, indexPath: indexPath)
+            item.isFirstAppearing = false
         }
         return cell
     }
@@ -247,6 +250,7 @@ extension EdamameSection : FlowLayoutProtocol {
         let view = dataSource.dequeueReusableCell(kind, withReuseType: item.viewType, forIndexPath: indexPath)
         if let view = view as? EdamameSupplementaryView {
             view.configure(item.item, collectionView: collectionView, indexPath: indexPath)
+            item.isFirstAppearing = false
         }
         return view
     }
@@ -488,5 +492,11 @@ public extension Edamame {
 public extension UICollectionView {
     var edamame: Edamame? {
         return dataSource as? Edamame ?? delegate as? Edamame
+    }
+
+    func isFirstAppearing(indexPath: NSIndexPath) -> Bool {
+        guard let sections = self.edamame?._sections where sections.count > indexPath.section else { return false }
+        guard let items = sections[indexPath.section].items as? [EdamameItem] where items.count > indexPath.item else { return false }
+        return items[indexPath.item].isFirstAppearing
     }
 }
