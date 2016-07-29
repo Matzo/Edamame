@@ -377,6 +377,9 @@ public extension Edamame {
     }
  
     func calculateSizeInBackground() {
+        if self.sections.filter({ $0.items.filter({ $0.calculateSizeInBackground && $0.needsLayout }).count > 0 }).count == 0 {
+            return
+        }
         dispatch_async(_calculateSizeQueue) { () -> Void in
             var needsReload = false
             for sectionIndex in 0..<self.sections.count {
