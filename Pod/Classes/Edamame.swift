@@ -358,6 +358,9 @@ public extension Edamame {
     }
 
     func setNeedsLayout(indexPath: NSIndexPath) {
+        guard self.sections.count > indexPath.section else { return }
+        guard self.sections[indexPath.section].items.count > indexPath.item else { return }
+        
         self.sections[indexPath.section].items[indexPath.item].needsLayout = true
         self.calculateSizeInBackground()
         self.collectionView.collectionViewLayout.invalidateLayout()
