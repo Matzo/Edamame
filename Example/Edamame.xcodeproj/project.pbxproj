@@ -20,10 +20,6 @@
 		F721F1F91C83399700A7CEC0 /* DemoCalcBackgroundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F721F1F71C83399700A7CEC0 /* DemoCalcBackgroundCell.xib */; };
 		F77B3A1C1C7B7924001CD511 /* DemoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */; };
 		F77B3A1E1C7B79FB001CD511 /* DemoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */; };
-		F7C145091C7064230046B4E0 /* ReactDemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C145051C7064230046B4E0 /* ReactDemoCell.swift */; };
-		F7C1450A1C7064230046B4E0 /* ReactDemoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C145061C7064230046B4E0 /* ReactDemoCell.xib */; };
-		F7C1450B1C7064230046B4E0 /* ReactDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C145071C7064230046B4E0 /* ReactDemoViewController.swift */; };
-		F7C1450C1C7064230046B4E0 /* ReactDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C145081C7064230046B4E0 /* ReactDemoViewController.xib */; };
 		F7C145121C70644A0046B4E0 /* DemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C1450E1C70644A0046B4E0 /* DemoCell.swift */; };
 		F7C145131C70644A0046B4E0 /* DemoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C1450F1C70644A0046B4E0 /* DemoCell.xib */; };
 		F7C145141C70644A0046B4E0 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C145101C70644A0046B4E0 /* DemoViewController.swift */; };
@@ -69,10 +65,6 @@
 		F721F1F71C83399700A7CEC0 /* DemoCalcBackgroundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoCalcBackgroundCell.xib; sourceTree = "<group>"; };
 		F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoHeaderView.swift; sourceTree = "<group>"; };
 		F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoHeaderView.xib; sourceTree = "<group>"; };
-		F7C145051C7064230046B4E0 /* ReactDemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactDemoCell.swift; sourceTree = "<group>"; };
-		F7C145061C7064230046B4E0 /* ReactDemoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReactDemoCell.xib; sourceTree = "<group>"; };
-		F7C145071C7064230046B4E0 /* ReactDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactDemoViewController.swift; sourceTree = "<group>"; };
-		F7C145081C7064230046B4E0 /* ReactDemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReactDemoViewController.xib; sourceTree = "<group>"; };
 		F7C1450E1C70644A0046B4E0 /* DemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoCell.swift; sourceTree = "<group>"; };
 		F7C1450F1C70644A0046B4E0 /* DemoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoCell.xib; sourceTree = "<group>"; };
 		F7C145101C70644A0046B4E0 /* DemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
@@ -139,7 +131,6 @@
 			isa = PBXGroup;
 			children = (
 				F7C1450D1C70644A0046B4E0 /* SimpleDemo */,
-				F7C145041C7064230046B4E0 /* ReactKitDemo */,
 				F7F311691CD7281000A57C63 /* RxSwiftDemo */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
@@ -196,17 +187,6 @@
 				F98F45A08819BDD96DAA8CE0 /* Pods-Edamame_Tests.release.xcconfig */,
 			);
 			name = Pods;
-			sourceTree = "<group>";
-		};
-		F7C145041C7064230046B4E0 /* ReactKitDemo */ = {
-			isa = PBXGroup;
-			children = (
-				F7C145051C7064230046B4E0 /* ReactDemoCell.swift */,
-				F7C145061C7064230046B4E0 /* ReactDemoCell.xib */,
-				F7C145071C7064230046B4E0 /* ReactDemoViewController.swift */,
-				F7C145081C7064230046B4E0 /* ReactDemoViewController.xib */,
-			);
-			path = ReactKitDemo;
 			sourceTree = "<group>";
 		};
 		F7C1450D1C70644A0046B4E0 /* SimpleDemo */ = {
@@ -335,8 +315,6 @@
 				F77B3A1E1C7B79FB001CD511 /* DemoHeaderView.xib in Resources */,
 				F7F3116D1CD7284100A57C63 /* RxDemoViewController.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
-				F7C1450A1C7064230046B4E0 /* ReactDemoCell.xib in Resources */,
-				F7C1450C1C7064230046B4E0 /* ReactDemoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,7 +355,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		4891A0A75B41D38948978596 /* [CP] Check Pods Manifest.lock */ = {
@@ -392,7 +370,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		613DFCB69A5731D5913ECA17 /* [CP] Copy Pods Resources */ = {
@@ -449,11 +427,9 @@
 			files = (
 				F7F311671CD600C100A57C63 /* RxDemoCell.swift in Sources */,
 				F721F1F81C83399700A7CEC0 /* DemoCalcBackgroundCell.swift in Sources */,
-				F7C145091C7064230046B4E0 /* ReactDemoCell.swift in Sources */,
 				F7F3116C1CD7284100A57C63 /* RxDemoViewController.swift in Sources */,
 				F721F1F41C83166F00A7CEC0 /* DemoDynamicHeightCell.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				F7C1450B1C7064230046B4E0 /* ReactDemoViewController.swift in Sources */,
 				F77B3A1C1C7B7924001CD511 /* DemoHeaderView.swift in Sources */,
 				F7C145141C70644A0046B4E0 /* DemoViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,

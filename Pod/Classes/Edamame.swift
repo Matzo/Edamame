@@ -91,6 +91,10 @@ public class EdamameSection {
     private var items = [EdamameItem]()
     private var supplementaryItems = [String: EdamameSupplementaryItem]()
     private var cellType: UICollectionViewCell.Type
+    
+    public var numberOfItems: Int {
+        return items.count
+    }
 
     public var index: Int {
         for (index, section) in dataSource.sections.enumerate() {
@@ -147,12 +151,19 @@ public extension EdamameSection {
     func appendItem(item: Any, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
         let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
         self.items.append(item)
- 
+
+        // add indexPath for Animation
+        let indexPath = NSIndexPath(forItem: self.items.count - 1, inSection: index)
+        dataSource?._addingIndexPaths.append(indexPath)
     }
 
     func insertItem(item: Any, atIndex: Int, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
         let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
         self.items.insert(item, atIndex: atIndex)
+
+        // add indexPath for Animation
+        let indexPath = NSIndexPath(forItem: atIndex, inSection: index)
+        dataSource?._addingIndexPaths.append(indexPath)
     }
  
     func appendSupplementaryItem(item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
@@ -160,10 +171,18 @@ public extension EdamameSection {
     }
  
     func removeItemAtIndex(index: Int) {
+        let indexPath = NSIndexPath(forItem: index, inSection: self.index)
+        dataSource?._removingIndexPaths.append(indexPath)
+        
         self.items.removeAtIndex(index)
     }
  
     func removeAllItems() {
+        for i in 0..<items.count {
+            let indexPath = NSIndexPath(forItem: i, inSection: index)
+            dataSource?._removingIndexPaths.append(indexPath)
+        }
+
         self.items.removeAll()
     }
  
@@ -200,6 +219,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        guard items.count > indexPath.item else { return CGSize.zero }
         let item = items[indexPath.item]
         if item.needsLayout && !item.calculateSizeInBackground {
             if let cellType = item.cellType as? EdamameCell.Type {
@@ -272,7 +292,22 @@ public class Edamame: NSObject {
     private let _calculateSizeQueue = dispatch_queue_create("matzo.Edamame", DISPATCH_QUEUE_SERIAL)
     private var _collectionView: UICollectionView
     private var _sections = [EdamameSection]()
- 
+    private var _addingIndexPaths: [NSIndexPath] = []
+    private var _removingIndexPaths: [NSIndexPath] = []
+    private var _isAnimating: Bool = false
+
+    // public
+    var hasAcyncSizingItem: Bool {
+        for indexPath in (_addingIndexPaths + _removingIndexPaths) {
+            let item = self[indexPath.section].items[indexPath.item]
+            if item.calculateSizeInBackground && item.needsLayout {
+                return true
+            }
+        }
+        return false
+//        return self.sections.filter({ $0.items.filter({ $0.calculateSizeInBackground && $0.needsLayout }).count > 0 }).count == 0
+    }
+
     override init() {
         fatalError("required collectionView")
     }
@@ -347,40 +382,81 @@ public extension Edamame {
         }
     }
  
-    func setNeedsLayout() {
-        for section in self.sections {
-            for item in section.items {
-                item.needsLayout = true
+    func setNeedsLayout(animated animated: Bool = false) {
+        let block = {
+            for section in self.sections {
+                for item in section.items {
+                    item.needsLayout = true
+                }
             }
+            self.calculateSizeInBackground()
+            self.collectionView.collectionViewLayout.invalidateLayout()
         }
-        self.calculateSizeInBackground()
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        if animated {
+            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
+                block()
+            }) { (done) in
+            }
+        } else {
+            block()
+        }
     }
 
-    func setNeedsLayout(indexPath: NSIndexPath) {
+    func setNeedsLayout(indexPath: NSIndexPath, animated: Bool = false) {
         guard self.sections.count > indexPath.section else { return }
         guard self.sections[indexPath.section].items.count > indexPath.item else { return }
-        
-        self.sections[indexPath.section].items[indexPath.item].needsLayout = true
-        self.calculateSizeInBackground()
-        self.collectionView.collectionViewLayout.invalidateLayout()
+
+        let block = {
+            self.sections[indexPath.section].items[indexPath.item].needsLayout = true
+            self.calculateSizeInBackground()
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        }
+        if animated {
+            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
+                block()
+            }) { (done) in
+            }
+        } else {
+            block()
+        }
     }
 
-    func reloadData() {
+    func reloadData(animated animated: Bool = false) {
         self.calculateSizeInBackground()
-        self.collectionView.reloadData()
+        if animated && !hasAcyncSizingItem && !_isAnimating {
+            _isAnimating = true
+            self.collectionView.performBatchUpdates(
+                {
+                    if self._addingIndexPaths.count > 0 {
+                        self.collectionView.insertItemsAtIndexPaths(self._addingIndexPaths)
+                        self._addingIndexPaths.removeAll()
+                    }
+                    if self._removingIndexPaths.count > 0 {
+                        self.collectionView.deleteItemsAtIndexPaths(self._removingIndexPaths)
+                        self._removingIndexPaths.removeAll()
+                    }
+                }, completion: { (done) in
+                    self.collectionView.reloadData()
+                    self._isAnimating = false
+                }
+            )
+        } else {
+            self.collectionView.reloadData()
+            self._addingIndexPaths.removeAll()
+            self._removingIndexPaths.removeAll()
+        }
     }
  
     func removeItemAtIndexPath(indexPath: NSIndexPath) {
-        self[indexPath.section].items.removeAtIndex(indexPath.item)
+        self[indexPath.section].removeItemAtIndex(indexPath.item)
     }
  
     func removeAllItems() {
         self._sections.removeAll()
     }
- 
+    
     func calculateSizeInBackground() {
-        if self.sections.filter({ $0.items.filter({ $0.calculateSizeInBackground && $0.needsLayout }).count > 0 }).count == 0 {
+        if !hasAcyncSizingItem {
             return
         }
         dispatch_async(_calculateSizeQueue) { () -> Void in

@@ -29,6 +29,7 @@ class DemoViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.dataSource.setup()
+        self.setupButton()
     }
     
     override func viewDidLayoutSubviews() {
@@ -37,11 +38,31 @@ class DemoViewController: UIViewController {
         self.dataSource.setNeedsLayout()
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func setupButton() {
+        let addButton = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: #selector(DemoViewController.insertCell))
+        let removeButton = UIBarButtonItem.init(barButtonSystemItem: .Trash, target: self, action: #selector(DemoViewController.removeCell))
+        navigationItem.rightBarButtonItems = [addButton, removeButton]
     }
     
+    func insertCell() {
+        let user = User(name: "Added")
+        dataSource[0].insertItem(user, atIndex: 0)
+        dataSource.reloadData(animated: true)
+    }
+    
+    func removeCell() {
+        if dataSource[0].numberOfItems > 0 {
+            dataSource[0].removeItemAtIndex(0)
+            dataSource.reloadData(animated: true)
+        }
+    }
+
+    func removeAllCells() {
+        if dataSource[0].numberOfItems > 0 {
+            dataSource[0].removeAllItems()
+            dataSource.reloadData(animated: true)
+        }
+    }
 }
 
 class DemoViewModel: Edamame {

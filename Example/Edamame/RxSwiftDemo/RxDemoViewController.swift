@@ -19,6 +19,8 @@ class RxDemoViewController: UIViewController {
             dataSource = RxDemoViewModel(collectionView: collectionView)
         }
     }
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    
     var dataSource: RxDemoViewModel!
     
     deinit {
@@ -31,6 +33,7 @@ class RxDemoViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        
         super.viewDidLayoutSubviews()
         self.dataSource.setNeedsLayout()
     }
@@ -39,12 +42,18 @@ class RxDemoViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    @IBAction func didTapDeleteButton() {
+        self.dataSource.removeItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))
+        self.dataSource.reloadData(animated: true)
+        print("did delete")
+    }
 }
 
 class RxDemoViewModel: Edamame {
     func loadData(completion:(users: [RxUser]) -> Void) {
         var users = [RxUser]()
-        for _ in 0...100 {
+        for _ in 1...100 {
             users.append(RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "bar", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "hoge", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))

@@ -4,7 +4,6 @@ use_frameworks!
 target 'Edamame_Example' do
   pod 'Edamame', :path => '../'
   pod 'MirrorObject'
-  pod 'ReactKit'
   pod 'RxSwift'
   pod 'RxCocoa'
 end

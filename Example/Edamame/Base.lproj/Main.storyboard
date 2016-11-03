@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Zyr-op-o8X">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zyr-op-o8X">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -31,38 +32,28 @@
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzw-Uf-hhT">
-                                <rect key="frame" x="20" y="84" width="182" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzw-Uf-hhT">
+                                <frame key="frameInset" minX="20" minY="84" width="182" height="30"/>
                                 <state key="normal" title="Open DemoViewController"/>
                                 <connections>
                                     <action selector="openDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="PXT-ca-tMH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vre-lE-gMd">
-                                <rect key="frame" x="20" y="122" width="221" height="30"/>
-                                <state key="normal" title="Open ReactDemoViewController"/>
-                                <connections>
-                                    <action selector="openReactDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Cvy-tx-0rO"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gQ5-ss-O2a">
-                                <rect key="frame" x="20" y="160" width="199" height="30"/>
                                 <state key="normal" title="Open RxDemoViewController"/>
                                 <connections>
                                     <action selector="openRxDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="GJ9-Ih-IvV"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" id="11d-jw-42A"/>
+                            <constraint firstItem="gQ5-ss-O2a" firstAttribute="top" secondItem="hzw-Uf-hhT" secondAttribute="bottom" constant="8" id="YFc-dO-F9c"/>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="hDy-UE-cIe"/>
-                            <constraint firstItem="gQ5-ss-O2a" firstAttribute="top" secondItem="Vre-lE-gMd" secondAttribute="bottom" constant="8" id="ioA-ML-uAS"/>
-                            <constraint firstItem="Vre-lE-gMd" firstAttribute="top" secondItem="hzw-Uf-hhT" secondAttribute="bottom" constant="8" id="ofH-c7-nZS"/>
-                            <constraint firstItem="Vre-lE-gMd" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="wOn-kq-xJm"/>
                             <constraint firstItem="gQ5-ss-O2a" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="zET-4Q-SaA"/>
                         </constraints>
                     </view>
@@ -70,6 +61,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="460" y="298"/>
         </scene>
     </scenes>
 </document>

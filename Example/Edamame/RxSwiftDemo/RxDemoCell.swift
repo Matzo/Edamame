@@ -36,12 +36,7 @@ class RxDemoCell: UICollectionViewCell, EdamameCell {
         item.rx_observeWeakly(String.self, "message").subscribeNext { [weak self] (message) in
             guard let _self = self else { return }
             _self.messageLabel.text = message
-            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseOut,
-                animations: {
-                    collectionView.edamame?.setNeedsLayout(indexPath)
-                },
-                completion: { (done) in
-            })
+            collectionView.edamame?.setNeedsLayout(indexPath, animated: true)
         }.addDisposableTo(disposeBag)
 
     }

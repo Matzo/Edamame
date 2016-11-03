@@ -1,17 +1,13 @@
 PODS:
-  - Edamame (0.1.16)
+  - Edamame (0.1.17)
   - MirrorObject (0.1.4)
-  - ReactKit (0.12.0):
-    - SwiftTask (~> 4.0.0)
   - RxCocoa (2.6.0):
     - RxSwift (~> 2.5)
   - RxSwift (2.6.0)
-  - SwiftTask (4.0.0)
 
 DEPENDENCIES:
   - Edamame (from `../`)
   - MirrorObject
-  - ReactKit
   - RxCocoa
   - RxSwift
 
@@ -20,13 +16,11 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Edamame: 5b3cbf96b53686d78ee8022ce69408031468dee5
+  Edamame: dfacb8621a4475b82559a1c1329fa59d33b773d7
   MirrorObject: 786e8a8da7e066a76030225a15377ac5af928aae
-  ReactKit: a2b705e8a8674b9cb38b8112c07891df87e8e62b
   RxCocoa: 89ab00d5753502520227940e3a0e0a0413683c6b
   RxSwift: 77f3a0b15324baa7a1c9bfa9f199648a82424e26
-  SwiftTask: 724ff63fc8bd9b366d242696d4aff098f6de3c3a
 
-PODFILE CHECKSUM: 1526f79e2908f0f497c6ab98d195111989c342db
+PODFILE CHECKSUM: 944508c57f7cc214f38f6e06b7f1985cd8129f95
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.0.rc.2
