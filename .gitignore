@@ -36,3 +36,6 @@ Pods/
 
 # Carthage
 Carthage/
+
+# bundler
+vender/
