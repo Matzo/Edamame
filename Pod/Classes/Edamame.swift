@@ -299,13 +299,14 @@ public class Edamame: NSObject {
     // public
     var hasAcyncSizingItem: Bool {
         for indexPath in (_addingIndexPaths + _removingIndexPaths) {
+            guard self.sections.count > indexPath.section && self[indexPath.section].items.count > indexPath.item else { continue }
+
             let item = self[indexPath.section].items[indexPath.item]
             if item.calculateSizeInBackground && item.needsLayout {
                 return true
             }
         }
         return false
-//        return self.sections.filter({ $0.items.filter({ $0.calculateSizeInBackground && $0.needsLayout }).count > 0 }).count == 0
     }
 
     override init() {

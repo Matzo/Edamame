@@ -4,8 +4,8 @@ use_frameworks!
 target 'Edamame_Example' do
   pod 'Edamame', :path => '../'
   pod 'MirrorObject'
-  pod 'RxSwift'
-  pod 'RxCocoa'
+  pod 'RxSwift', '2.6.0'
+  pod 'RxCocoa', '2.6.0'
 end
 
 target 'Edamame_Tests' do
