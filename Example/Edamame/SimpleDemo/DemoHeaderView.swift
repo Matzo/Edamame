@@ -12,12 +12,12 @@ import Edamame
 class DemoHeaderView: UICollectionReusableView, EdamameSupplementaryView {
     @IBOutlet weak var label: UILabel!
 
-    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
+    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) {
         guard let header = item as? String else { return }
         
         label.text = header
     }
-    static func sizeForItem(item: Any, collectionView: UICollectionView, section: Int) -> CGSize {
-        return CGSizeMake(collectionView.frame.size.width, 44)
+    static func sizeForItem(_ item: Any, collectionView: UICollectionView, section: Int) -> CGSize {
+        return CGSize(width: collectionView.frame.size.width, height: 44)
     }
 }

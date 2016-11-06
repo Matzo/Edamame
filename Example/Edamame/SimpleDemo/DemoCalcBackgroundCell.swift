@@ -16,20 +16,20 @@ class DemoCalcBackgroundCell: UICollectionViewCell, EdamameCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.contentView.backgroundColor = UIColor.yellowColor()
+        self.contentView.backgroundColor = UIColor.yellow
     }
 
-    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
+    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) {
         guard let string = item as? String else { return }
         
         label.text = string
     }
     
-    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
+    static func sizeForItem(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) -> CGSize {
         guard let string = item as? String else { return CGSize.zero }
 
-        NSThread.sleepForTimeInterval(0.1)
-        let bounds = (string as NSString).boundingRectWithSize(CGSize(width: collectionView.frame.size.width, height: CGFloat.max), options: .UsesLineFragmentOrigin, attributes: nil, context: nil)
+        Thread.sleep(forTimeInterval: 0.1)
+        let bounds = (string as NSString).boundingRect(with: CGSize(width: collectionView.frame.size.width, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: nil, context: nil)
 
         return CGSize(width: collectionView.frame.size.width, height: bounds.size.height)
     }

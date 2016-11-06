@@ -14,14 +14,17 @@ class RxDemoViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
-            collectionView.backgroundColor = UIColor.whiteColor()
+            collectionView.backgroundColor = UIColor.white
             collectionView.alwaysBounceVertical = true
-            dataSource = RxDemoViewModel(collectionView: collectionView)
         }
     }
     @IBOutlet weak var addButton: UIBarButtonItem!
     
-    var dataSource: RxDemoViewModel!
+    lazy var dataSource: RxDemoViewModel = {
+        let ds = RxDemoViewModel(collectionView: self.collectionView)
+        return ds
+    }()
+
     
     deinit {
         print("[DEINIT]", self)
@@ -44,14 +47,14 @@ class RxDemoViewController: UIViewController {
     }
     
     @IBAction func didTapDeleteButton() {
-        self.dataSource.removeItemAtIndexPath(NSIndexPath(forItem: 0, inSection: 0))
+        self.dataSource.removeItemAtIndexPath(IndexPath(item: 0, section: 0))
         self.dataSource.reloadData(animated: true)
         print("did delete")
     }
 }
 
 class RxDemoViewModel: Edamame {
-    func loadData(completion:(users: [RxUser]) -> Void) {
+    func loadData(_ completion:(_ users: [RxUser]) -> Void) {
         var users = [RxUser]()
         for _ in 1...100 {
             users.append(RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
@@ -59,7 +62,7 @@ class RxDemoViewModel: Edamame {
             users.append(RxUser(name: "hoge", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "fuga", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
         }
-        completion(users: users)
+        completion(users)
     }
     func setup() {
         self.registerNibFromClass(RxDemoCell.self)

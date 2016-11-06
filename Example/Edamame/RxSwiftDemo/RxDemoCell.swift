@@ -8,13 +8,13 @@
 
 import UIKit
 import Edamame
+import MirrorObject
 import RxSwift
 import RxCocoa
-import MirrorObject
 
 class RxDemoCell: UICollectionViewCell, EdamameCell {
     
-    static let viewHolder = UINib(nibName: String(RxDemoCell.self), bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! RxDemoCell
+    static let viewHolder = UINib(nibName: String(describing: RxDemoCell.self), bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! RxDemoCell
     
     var disposeBag = DisposeBag()
     
@@ -27,27 +27,25 @@ class RxDemoCell: UICollectionViewCell, EdamameCell {
         self.backgroundColor = UIColor(red: 1.0, green: 0.8, blue: 1.0, alpha: 1.0)
     }
     
-    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
-        guard let item = item as? RxUser else { return }
+    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) {
+        guard let user = item as? RxUser else { return }
 
-        nameLabel.text = item.name
-        
+        nameLabel.text = user.name
         disposeBag = DisposeBag()
-        item.rx_observeWeakly(String.self, "message").subscribeNext { [weak self] (message) in
+        user.rx.observeWeakly(String.self, "message").subscribe(onNext: { [weak self] (message) in
             guard let _self = self else { return }
             _self.messageLabel.text = message
             collectionView.edamame?.setNeedsLayout(indexPath, animated: true)
-        }.addDisposableTo(disposeBag)
-
+        }).addDisposableTo(disposeBag)
     }
     
-    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
+    static func sizeForItem(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.size.width * 0.5
         return calculateSize(item, collectionView: collectionView, indexPath: indexPath, cell: self.viewHolder, width: width)
     }
 }
 
-class RxUser : NSObject, MirrorObject {
+class RxUser: NSObject, MirrorObject {
     var name: String
     dynamic var message: String
     init(name: String, message: String) {

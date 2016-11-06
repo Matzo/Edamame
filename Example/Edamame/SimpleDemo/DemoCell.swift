@@ -16,16 +16,16 @@ class DemoCell: UICollectionViewCell, EdamameCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        self.backgroundColor = UIColor.greenColor()
+        self.backgroundColor = UIColor.green
     }
     
-    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) {
+    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) {
         guard let user = item as? User else { return }
         
         self.label.text = user.name
     }
 
-    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize {
+    static func sizeForItem(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) -> CGSize {
         let columns: CGFloat = 4
         let margin: CGFloat = 8
         let width = (collectionView.frame.size.width - (margin * (columns - 1))) / columns

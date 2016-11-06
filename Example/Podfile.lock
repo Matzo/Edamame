@@ -1,26 +1,26 @@
 PODS:
   - Edamame (0.1.19)
-  - MirrorObject (0.1.4)
-  - RxCocoa (2.6.0):
-    - RxSwift (~> 2.5)
-  - RxSwift (2.6.0)
+  - MirrorObject (1.0.0)
+  - RxCocoa (3.0.0):
+    - RxSwift (~> 3.0)
+  - RxSwift (3.0.0)
 
 DEPENDENCIES:
   - Edamame (from `../`)
   - MirrorObject
-  - RxCocoa (= 2.6.0)
-  - RxSwift (= 2.6.0)
+  - RxCocoa
+  - RxSwift
 
 EXTERNAL SOURCES:
   Edamame:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
   Edamame: a4e736913dc5ae9e6252e92c07f04f9af23450ef
-  MirrorObject: 786e8a8da7e066a76030225a15377ac5af928aae
-  RxCocoa: 89ab00d5753502520227940e3a0e0a0413683c6b
-  RxSwift: 77f3a0b15324baa7a1c9bfa9f199648a82424e26
+  MirrorObject: a7320826b5b58a44890eed24de0d7f8e35123456
+  RxCocoa: 0a2f3ae381cf16f4021a4cee7a4420f83058a965
+  RxSwift: a930cd662f5b4a7ca9dc3518585dba91dadf497c
 
-PODFILE CHECKSUM: e399e11847a004d7d0c4ccfff1cda017d39d94c4
+PODFILE CHECKSUM: 9d8e1b0c2a46f5aea35eb685dd0f87ba31eae100
 
 COCOAPODS: 1.1.1

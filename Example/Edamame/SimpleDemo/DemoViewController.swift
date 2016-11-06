@@ -13,12 +13,14 @@ class DemoViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
-            collectionView.backgroundColor = UIColor.whiteColor()
+            collectionView.backgroundColor = UIColor.white
             collectionView.alwaysBounceVertical = true
-            dataSource = DemoViewModel(collectionView: collectionView)
         }
     }
-    var dataSource: DemoViewModel!
+    lazy var dataSource: DemoViewModel = {
+        let ds = DemoViewModel(collectionView: self.collectionView)
+        return ds
+    }()
     
     deinit {
         print("[DEINIT]", self)
@@ -39,8 +41,8 @@ class DemoViewController: UIViewController {
     }
     
     func setupButton() {
-        let addButton = UIBarButtonItem.init(barButtonSystemItem: .Add, target: self, action: #selector(DemoViewController.insertCell))
-        let removeButton = UIBarButtonItem.init(barButtonSystemItem: .Trash, target: self, action: #selector(DemoViewController.removeCell))
+        let addButton = UIBarButtonItem.init(barButtonSystemItem: .add, target: self, action: #selector(DemoViewController.insertCell))
+        let removeButton = UIBarButtonItem.init(barButtonSystemItem: .trash, target: self, action: #selector(DemoViewController.removeCell))
         navigationItem.rightBarButtonItems = [addButton, removeButton]
     }
     
@@ -66,7 +68,7 @@ class DemoViewController: UIViewController {
 }
 
 class DemoViewModel: Edamame {
-    func loadData(completion:(users: [User]) -> Void) {
+    func loadData(_ completion:(_ users: [User]) -> Void) {
         let users = [
             User(name: "foo"),
             User(name: "bar"),
@@ -74,7 +76,7 @@ class DemoViewModel: Edamame {
             User(name: "fuga"),
             User(name: "daa"),
         ]
-        completion(users: users + users + users)
+        completion(users + users + users)
     }
     func setup() {
         self.registerNibFromClass(DemoCell.self)

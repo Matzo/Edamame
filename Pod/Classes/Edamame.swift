@@ -10,43 +10,43 @@ import UIKit
 
 // MARK: - FlowLayoutProtocol
 @objc public protocol FlowLayoutProtocol {
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize
-    optional func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize
-    optional func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView
-    optional func collectionView(collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: NSIndexPath) -> Bool
-    optional func collectionView(collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath)
-    optional func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath)
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize
+    @objc optional func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView
+    @objc optional func collectionView(_ collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: IndexPath) -> Bool
+    @objc optional func collectionView(_ collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: IndexPath, toIndexPath destinationIndexPath: IndexPath)
+    @objc optional func collectionView(_ collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: IndexPath)
 }
 
 // MARK: - EdamameCell
 public protocol EdamameCell {
-    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath)
-    static func sizeForItem(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath) -> CGSize
+    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath)
+    static func sizeForItem(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) -> CGSize
 }
 
 public protocol EdamameSupplementaryView {
-    func configure(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath)
-    static func sizeForItem(item: Any, collectionView: UICollectionView, section: Int) -> CGSize
+    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath)
+    static func sizeForItem(_ item: Any, collectionView: UICollectionView, section: Int) -> CGSize
 }
 
 public extension EdamameCell {
-    static func calculateSize<T: UICollectionViewCell where T: EdamameCell>(item: Any, collectionView: UICollectionView, indexPath: NSIndexPath, cell: T, width: CGFloat? = nil) -> CGSize {
+    static func calculateSize<T: UICollectionViewCell>(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath, cell: T, width: CGFloat? = nil) -> CGSize where T: EdamameCell {
         let width = width ?? collectionView.frame.size.width
-        let widthConstraint = NSLayoutConstraint(item: cell.contentView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1, constant: width)
+        let widthConstraint = NSLayoutConstraint(item: cell.contentView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: width)
         let translatesAutoresizingMaskIntoConstraints = cell.contentView.translatesAutoresizingMaskIntoConstraints
         cell.contentView.translatesAutoresizingMaskIntoConstraints = false
         cell.contentView.addConstraint(widthConstraint)
 
         cell.configure(item, collectionView: collectionView, indexPath: indexPath)
-        cell.bounds = CGRectMake(0, 0, width, cell.bounds.height)
+        cell.bounds = CGRect(x: 0, y: 0, width: width, height: cell.bounds.height)
         cell.setNeedsLayout()
         cell.layoutIfNeeded()
  
-        let size = cell.contentView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
+        let size = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
         cell.contentView.removeConstraint(widthConstraint)
         cell.contentView.translatesAutoresizingMaskIntoConstraints = translatesAutoresizingMaskIntoConstraints
 
@@ -54,7 +54,7 @@ public extension EdamameCell {
     }
 }
 
-public typealias EdamameSelectionHandler = (item: Any, indexPath: NSIndexPath) -> Void
+public typealias EdamameSelectionHandler = (_ item: Any, _ indexPath: IndexPath) -> Void
 class EdamameItem {
     var item: Any
     var cellType: UICollectionViewCell.Type
@@ -86,32 +86,32 @@ class EdamameSupplementaryItem {
 }
 
 // MARK: - EdamameSection
-public class EdamameSection {
-    private weak var dataSource: Edamame!
-    private var items = [EdamameItem]()
-    private var supplementaryItems = [String: EdamameSupplementaryItem]()
-    private var cellType: UICollectionViewCell.Type
+open class EdamameSection {
+    fileprivate weak var dataSource: Edamame!
+    fileprivate var items = [EdamameItem]()
+    fileprivate var supplementaryItems = [String: EdamameSupplementaryItem]()
+    fileprivate var cellType: UICollectionViewCell.Type
     
-    public var numberOfItems: Int {
+    open var numberOfItems: Int {
         return items.count
     }
 
-    public var index: Int {
-        for (index, section) in dataSource.sections.enumerate() {
+    open var index: Int {
+        for (index, section) in dataSource.sections.enumerated() {
             if section === self {
                 return index
             }
         }
         return 0
     }
-    public var hidden: Bool = false
-    public var inset: UIEdgeInsets?
+    open var hidden: Bool = false
+    open var inset: UIEdgeInsets?
 
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
     }
 
-    public func items<T>(type: T.Type) -> [T] {
+    open func items<T>(_ type: T.Type) -> [T] {
         return self.items.filter({$0.item is T}).map({$0.item as! T})
     }
 }
@@ -130,63 +130,63 @@ public extension EdamameSection {
         }
     }
  
-    func setCellType<T: UICollectionViewCell>(cellType: T.Type) {
+    func setCellType<T: UICollectionViewCell>(_ cellType: T.Type) {
         self.cellType = cellType
     }
  
-    func setCellType<T: UICollectionViewCell, I: Equatable>(cellType: T.Type, forItem item: I) {
+    func setCellType<T: UICollectionViewCell, I: Equatable>(_ cellType: T.Type, forItem item: I) {
         for cellItem in items {
-            if let _item = cellItem.item as? I where _item == item {
+            if let _item = cellItem.item as? I, _item == item {
                 cellItem.cellType = cellType
             }
         }
     }
  
-    func setCellType<T: UICollectionViewCell>(cellType: T.Type, forItemAt index: Int) {
+    func setCellType<T: UICollectionViewCell>(_ cellType: T.Type, forItemAt index: Int) {
         if items.count > index {
             items[index].cellType = cellType
         }
     }
 
-    func appendItem(item: Any, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
+    func appendItem(_ item: Any, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
         let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
         self.items.append(item)
 
         // add indexPath for Animation
-        let indexPath = NSIndexPath(forItem: self.items.count - 1, inSection: index)
+        let indexPath = IndexPath(item: self.items.count - 1, section: index)
         dataSource?._addingIndexPaths.append(indexPath)
     }
 
-    func insertItem(item: Any, atIndex: Int, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
+    func insertItem(_ item: Any, atIndex: Int, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
         let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
-        self.items.insert(item, atIndex: atIndex)
+        self.items.insert(item, at: atIndex)
 
         // add indexPath for Animation
-        let indexPath = NSIndexPath(forItem: atIndex, inSection: index)
+        let indexPath = IndexPath(item: atIndex, section: index)
         dataSource?._addingIndexPaths.append(indexPath)
     }
  
-    func appendSupplementaryItem(item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
+    func appendSupplementaryItem(_ item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
         self.supplementaryItems[kind] = EdamameSupplementaryItem(item: item, viewType: viewType ?? self.cellType)
     }
  
-    func removeItemAtIndex(index: Int) {
-        let indexPath = NSIndexPath(forItem: index, inSection: self.index)
+    func removeItemAtIndex(_ index: Int) {
+        let indexPath = IndexPath(item: index, section: self.index)
         dataSource?._removingIndexPaths.append(indexPath)
         
-        self.items.removeAtIndex(index)
+        self.items.remove(at: index)
     }
  
     func removeAllItems() {
         for i in 0..<items.count {
-            let indexPath = NSIndexPath(forItem: i, inSection: index)
+            let indexPath = IndexPath(item: i, section: index)
             dataSource?._removingIndexPaths.append(indexPath)
         }
 
         self.items.removeAll()
     }
  
-    func removeSupplementaryItem(kind: String) {
+    func removeSupplementaryItem(_ kind: String) {
         self.supplementaryItems[kind] = nil
     }
  
@@ -197,7 +197,7 @@ public extension EdamameSection {
 
 // MARK: DataSource
 extension EdamameSection {
-    func numberOfItemsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfItemsInCollectionView(_ collectionView: UICollectionView) -> Int {
         if self.hidden {
             return 0
         } else {
@@ -208,7 +208,7 @@ extension EdamameSection {
 
 // MARK: FLowLayout
 extension EdamameSection : FlowLayoutProtocol {
-    @objc func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAtIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let item = items[indexPath.item]
         let cell = dataSource.dequeueReusableCell(item.cellType.self, forIndexPath: indexPath)
         if let cell = cell as? EdamameCell {
@@ -218,7 +218,7 @@ extension EdamameSection : FlowLayoutProtocol {
         return cell
     }
 
-    @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
         guard items.count > indexPath.item else { return CGSize.zero }
         let item = items[indexPath.item]
         if item.needsLayout && !item.calculateSizeInBackground {
@@ -241,7 +241,7 @@ extension EdamameSection : FlowLayoutProtocol {
         return item.size
     }
  
-    @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
@@ -252,7 +252,7 @@ extension EdamameSection : FlowLayoutProtocol {
         return item.size
     }
  
-    @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
@@ -263,7 +263,7 @@ extension EdamameSection : FlowLayoutProtocol {
         return item.size
     }
  
-    @objc public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    @objc public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView {
         guard let item = supplementaryItems[kind] else {
             return dataSource.dequeueReusableCell(kind, withReuseType: UICollectionReusableView.self, forIndexPath: indexPath)
         }
@@ -275,26 +275,26 @@ extension EdamameSection : FlowLayoutProtocol {
         return view
     }
     
-    @objc public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
         if let inset = inset {
             return inset
         } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             return layout.sectionInset
         }
-        return UIEdgeInsetsZero
+        return UIEdgeInsets.zero
     }
 }
 
 // MARK: - Edamame
-public class Edamame: NSObject {
+open class Edamame: NSObject {
 
     /// readonly
-    private let _calculateSizeQueue = dispatch_queue_create("matzo.Edamame", DISPATCH_QUEUE_SERIAL)
-    private var _collectionView: UICollectionView
-    private var _sections = [EdamameSection]()
-    private var _addingIndexPaths: [NSIndexPath] = []
-    private var _removingIndexPaths: [NSIndexPath] = []
-    private var _isAnimating: Bool = false
+    fileprivate let _calculateSizeQueue = DispatchQueue(label: "matzo.Edamame", attributes: [])
+    fileprivate var _collectionView: UICollectionView
+    fileprivate var _sections = [EdamameSection]()
+    fileprivate var _addingIndexPaths: [IndexPath] = []
+    fileprivate var _removingIndexPaths: [IndexPath] = []
+    fileprivate var _isAnimating: Bool = false
 
     // public
     var hasAcyncSizingItem: Bool {
@@ -344,13 +344,13 @@ public extension Edamame {
         }
     }
  
-    subscript(index: NSIndexPath) -> Any {
+    subscript(index: IndexPath) -> Any {
         get {
             return self[index.section][index.item]
         }
     }
 
-    func createSection(cellType: UICollectionViewCell.Type? = nil, atIndex index: Int? = nil) -> EdamameSection {
+    func createSection(_ cellType: UICollectionViewCell.Type? = nil, atIndex index: Int? = nil) -> EdamameSection {
         let section = EdamameSection(cellType: cellType)
         if let index = index {
             self.insertSection(section, atIndex: index)
@@ -360,19 +360,19 @@ public extension Edamame {
         return section
     }
 
-    func appendSection(section: EdamameSection) {
+    func appendSection(_ section: EdamameSection) {
         section.dataSource = self
         self._sections.append(section)
     }
 
-    func insertSection(section: EdamameSection, atIndex: Int) {
+    func insertSection(_ section: EdamameSection, atIndex: Int) {
         section.dataSource = self
-        self._sections.insert(section, atIndex: atIndex)
+        self._sections.insert(section, at: atIndex)
     }
 
-    func reloadSections(animated animated: Bool = false) {
+    func reloadSections(animated: Bool = false) {
         if self.sections.count > 0 {
-            let range = NSIndexSet(indexesInRange: NSMakeRange(0, self.sections.count))
+            let range = IndexSet(integersIn: NSMakeRange(0, self.sections.count).toRange()!)
             if animated {
                 self.collectionView.reloadSections(range)
             } else {
@@ -383,7 +383,7 @@ public extension Edamame {
         }
     }
  
-    func setNeedsLayout(animated animated: Bool = false) {
+    func setNeedsLayout(animated: Bool = false) {
         let block = {
             for section in self.sections {
                 for item in section.items {
@@ -394,7 +394,7 @@ public extension Edamame {
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
         if animated {
-            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
                 block()
             }) { (done) in
             }
@@ -403,7 +403,7 @@ public extension Edamame {
         }
     }
 
-    func setNeedsLayout(indexPath: NSIndexPath, animated: Bool = false) {
+    func setNeedsLayout(_ indexPath: IndexPath, animated: Bool = false) {
         guard self.sections.count > indexPath.section else { return }
         guard self.sections[indexPath.section].items.count > indexPath.item else { return }
 
@@ -413,7 +413,7 @@ public extension Edamame {
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
         if animated {
-            UIView.animateWithDuration(0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .CurveEaseOut, animations: {
+            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
                 block()
             }) { (done) in
             }
@@ -422,18 +422,18 @@ public extension Edamame {
         }
     }
 
-    func reloadData(animated animated: Bool = false) {
+    func reloadData(animated: Bool = false) {
         self.calculateSizeInBackground()
         if animated && !hasAcyncSizingItem && !_isAnimating {
             _isAnimating = true
             self.collectionView.performBatchUpdates(
                 {
                     if self._addingIndexPaths.count > 0 {
-                        self.collectionView.insertItemsAtIndexPaths(self._addingIndexPaths)
+                        self.collectionView.insertItems(at: self._addingIndexPaths)
                         self._addingIndexPaths.removeAll()
                     }
                     if self._removingIndexPaths.count > 0 {
-                        self.collectionView.deleteItemsAtIndexPaths(self._removingIndexPaths)
+                        self.collectionView.deleteItems(at: self._removingIndexPaths)
                         self._removingIndexPaths.removeAll()
                     }
                 }, completion: { (done) in
@@ -448,7 +448,7 @@ public extension Edamame {
         }
     }
  
-    func removeItemAtIndexPath(indexPath: NSIndexPath) {
+    func removeItemAtIndexPath(_ indexPath: IndexPath) {
         self[indexPath.section].removeItemAtIndex(indexPath.item)
     }
  
@@ -460,7 +460,7 @@ public extension Edamame {
         if !hasAcyncSizingItem {
             return
         }
-        dispatch_async(_calculateSizeQueue) { () -> Void in
+        _calculateSizeQueue.async { () -> Void in
             var needsReload = false
             for sectionIndex in 0..<self.sections.count {
                 let section = self.sections[sectionIndex]
@@ -469,7 +469,7 @@ public extension Edamame {
                     guard item.calculateSizeInBackground && item.needsLayout else { continue }
  
                     if let cellType = item.cellType as? EdamameCell.Type {
-                        let indexPath = NSIndexPath(forItem: sectionIndex, inSection: itemIndex)
+                        let indexPath = IndexPath(item: sectionIndex, section: itemIndex)
                         item.size = cellType.sizeForItem(item.item, collectionView: self.collectionView, indexPath: indexPath)
                         item.needsLayout = false
                         needsReload = true
@@ -478,7 +478,7 @@ public extension Edamame {
             }
  
             if needsReload {
-                dispatch_sync(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.sync(execute: { () -> Void in
                     self.collectionView.reloadData()
                 })
             }
@@ -488,48 +488,48 @@ public extension Edamame {
 
 // MARK: UICollectionViewDelegateFlowLayout
 extension Edamame: UICollectionViewDelegateFlowLayout {
-    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let section = sections[indexPath.section]
         return section.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAtIndexPath: indexPath)
     }
 
-    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let sectionItem = sections[section]
         return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForHeaderInSection: section)
     }
 
-    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         let sectionItem = sections[section]
         return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForFooterInSection: section)
     }
     
-    public func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         let sectionItem = sections[section]
         return sectionItem.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAtIndex: section)
     }
 
-    public func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        sections[indexPath.section].items[indexPath.item].selectionHandler?(item: self[indexPath], indexPath: indexPath)
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        sections[indexPath.section].items[indexPath.item].selectionHandler?(self[indexPath], indexPath)
     }
 }
 
 // MARK: UICollectionViewDataSource
 extension Edamame: UICollectionViewDataSource {
-    public func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return sections.count
     }
  
-    public func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let section = sections[section]
         return section.numberOfItemsInCollectionView(collectionView)
     }
 
-    public func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let section = sections[indexPath.section]
         return section.collectionView(collectionView, cellForItemAtIndexPath: indexPath)
     }
 
-    public func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let section = sections[indexPath.section]
         return section.collectionView(collectionView, viewForSupplementaryElementOfKind: kind, atIndexPath: indexPath)
     }
@@ -537,37 +537,37 @@ extension Edamame: UICollectionViewDataSource {
 
 // MARK: - Utils
 public extension Edamame {
-    func registerNibFromClass<T: UICollectionViewCell>(type: T.Type) {
-        let className = String(T)
+    func registerNibFromClass<T: UICollectionViewCell>(_ type: T.Type) {
+        let className = String(describing: type)
         let nib = UINib(nibName: className, bundle: nil)
-        collectionView.registerNib(nib, forCellWithReuseIdentifier: className)
+        collectionView.register(nib, forCellWithReuseIdentifier: className)
     }
  
-    func registerNibFromClass<T: UICollectionReusableView>(type: T.Type, forSupplementaryViewOfKind kind: String) {
-        let className = String(T)
+    func registerNibFromClass<T: UICollectionReusableView>(_ type: T.Type, forSupplementaryViewOfKind kind: String) {
+        let className = String(describing: type)
         let nib = UINib(nibName: className, bundle: nil)
-        collectionView.registerNib(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: className)
+        collectionView.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: className)
     }
  
-    func registerClassFromClass<T: UICollectionViewCell>(type: T.Type) {
-        let className = String(T)
-        collectionView.registerClass(T.self, forCellWithReuseIdentifier: className)
+    func registerClassFromClass<T: UICollectionViewCell>(_ type: T.Type) {
+        let className = String(describing: type)
+        collectionView.register(T.self, forCellWithReuseIdentifier: className)
     }
  
-    func registerClassFromClass<T: UICollectionReusableView>(type: T.Type, forSupplementaryViewOfKind kind: String) {
-        let className = String(T)
-        collectionView.registerClass(T.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: className)
+    func registerClassFromClass<T: UICollectionReusableView>(_ type: T.Type, forSupplementaryViewOfKind kind: String) {
+        let className = String(describing: type)
+        collectionView.register(T.self, forSupplementaryViewOfKind: kind, withReuseIdentifier: className)
     }
  
-    func dequeueReusableCell<T: UICollectionViewCell>(type: T.Type,
-        forIndexPath indexPath: NSIndexPath) -> T {
-            return collectionView.dequeueReusableCellWithReuseIdentifier(String(type), forIndexPath: indexPath) as! T
+    func dequeueReusableCell<T: UICollectionViewCell>(_ type: T.Type,
+        forIndexPath indexPath: IndexPath) -> T {
+            return collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: type), for: indexPath) as! T
     }
  
-    func dequeueReusableCell<T: UICollectionReusableView>(kind: String, withReuseType type: T.Type,
-        forIndexPath indexPath: NSIndexPath) -> T {
-            return collectionView.dequeueReusableSupplementaryViewOfKind(kind,
-                withReuseIdentifier: String(type), forIndexPath: indexPath) as! T
+    func dequeueReusableCell<T: UICollectionReusableView>(_ kind: String, withReuseType type: T.Type,
+        forIndexPath indexPath: IndexPath) -> T {
+            return collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                withReuseIdentifier: String(describing: type), for: indexPath) as! T
     }
 }
 
@@ -577,8 +577,8 @@ public extension UICollectionView {
         return dataSource as? Edamame ?? delegate as? Edamame
     }
 
-    func isFirstAppearing(indexPath: NSIndexPath) -> Bool {
-        guard let sections = self.edamame?._sections where sections.count > indexPath.section else { return false }
+    func isFirstAppearing(_ indexPath: IndexPath) -> Bool {
+        guard let sections = self.edamame?._sections, sections.count > indexPath.section else { return false }
         guard sections[indexPath.section].items.count > indexPath.item else { return false }
 
         return sections[indexPath.section].items[indexPath.item].isFirstAppearing
