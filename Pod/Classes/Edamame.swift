@@ -244,6 +244,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard !self.hidden else { return CGSize.zero }
         guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
@@ -255,6 +256,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard !self.hidden else { return CGSize.zero }
         guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
@@ -266,6 +268,9 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView {
+        guard !self.hidden else {
+            return dataSource.dequeueReusableCell(kind, withReuseType: UICollectionReusableView.self, forIndexPath: indexPath)
+        }
         guard let item = supplementaryItems[kind] else {
             return dataSource.dequeueReusableCell(kind, withReuseType: UICollectionReusableView.self, forIndexPath: indexPath)
         }
@@ -278,6 +283,9 @@ extension EdamameSection : FlowLayoutProtocol {
     }
     
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        if self.hidden {
+            return UIEdgeInsets.zero
+        }
         if let inset = inset {
             return inset
         } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
@@ -522,10 +530,10 @@ extension Edamame: UICollectionViewDelegateFlowLayout {
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return sections[section].minimumInteritemSpacing
+        return sections[section].collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAtIndex: section)
     }
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sections[section].minimumLineSpacing
+        return sections[section].collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAtIndex: section)
     }
 }
 

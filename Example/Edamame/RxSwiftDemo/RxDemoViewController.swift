@@ -56,7 +56,7 @@ class RxDemoViewController: UIViewController {
 class RxDemoViewModel: Edamame {
     func loadData(_ completion:(_ users: [RxUser]) -> Void) {
         var users = [RxUser]()
-        for _ in 1...100 {
+        for _ in 1...10 {
             users.append(RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "bar", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "hoge", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))

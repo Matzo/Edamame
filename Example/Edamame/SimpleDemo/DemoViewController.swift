@@ -147,5 +147,24 @@ class DemoViewModel: Edamame {
             
             self.reloadData()
         }
+
+        // Hidden section Demo
+        self.loadData { (users) -> Void in
+            let section = self[4]
+            section.hidden = true
+            section.minimumInteritemSpacing = 0
+            section.minimumLineSpacing = 0
+            section.setCellType(DemoCell.self)
+            section.inset = UIEdgeInsets(top: 32, left: 16, bottom: 32, right: 16)
+            section.appendSupplementaryItem("Hidden Header Name", kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
+            section.appendSupplementaryItem("Hidden Footer Name", kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
+
+            for user in users {
+                section.appendItem(user)
+            }
+
+            self.reloadData()
+        }
+
     }
 }
