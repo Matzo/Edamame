@@ -68,6 +68,8 @@ class RxDemoViewModel: Edamame {
         self.registerNibFromClass(RxDemoCell.self)
         self.loadData { (users) -> Void in
             let section = self.createSection()
+            section.minimumLineSpacing = 0
+            section.minimumInteritemSpacing = 0
             for user in users {
                 section.appendItem(user, cellType: RxDemoCell.self) { (item, indexPath) -> Void in
                     guard let user = item as? RxUser else { return }

@@ -106,6 +106,8 @@ open class EdamameSection {
     }
     open var hidden: Bool = false
     open var inset: UIEdgeInsets?
+    open var minimumLineSpacing: CGFloat = 0
+    open var minimumInteritemSpacing: CGFloat = 0
 
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
@@ -282,6 +284,13 @@ extension EdamameSection : FlowLayoutProtocol {
             return layout.sectionInset
         }
         return UIEdgeInsets.zero
+    }
+
+    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return minimumLineSpacing
+    }
+    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
+        return minimumInteritemSpacing
     }
 }
 
@@ -510,6 +519,13 @@ extension Edamame: UICollectionViewDelegateFlowLayout {
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         sections[indexPath.section].items[indexPath.item].selectionHandler?(self[indexPath], indexPath)
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return sections[section].minimumInteritemSpacing
+    }
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sections[section].minimumLineSpacing
     }
 }
 
