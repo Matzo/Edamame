@@ -106,8 +106,8 @@ open class EdamameSection {
     }
     open var hidden: Bool = false
     open var inset: UIEdgeInsets?
-    open var minimumLineSpacing: CGFloat = 0
-    open var minimumInteritemSpacing: CGFloat = 0
+    open var minimumLineSpacing: CGFloat?
+    open var minimumInteritemSpacing: CGFloat?
 
     public init(cellType: UICollectionViewCell.Type? = nil) {
         self.cellType = cellType ?? UICollectionViewCell.self
@@ -295,10 +295,22 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return minimumLineSpacing
+        if let minimumLineSpacing = self.minimumLineSpacing {
+            return minimumLineSpacing
+        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.minimumLineSpacing
+        } else {
+            return 0
+        }
     }
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        return minimumInteritemSpacing
+        if let minimumInteritemSpacing = self.minimumInteritemSpacing {
+            return minimumInteritemSpacing
+        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            return layout.minimumInteritemSpacing
+        } else {
+            return 0
+        }
     }
 }
 
