@@ -47,16 +47,42 @@ class RxDemoViewController: UIViewController {
     }
     
     @IBAction func didTapDeleteButton() {
-        self.dataSource.removeItemAtIndexPath(IndexPath(item: 0, section: 0))
-        self.dataSource.reloadData(animated: true)
-        print("did delete")
+        let section = 0
+        self.dataSource.deleteAllAndAddItems(section: section)
     }
+
+    @IBAction func didTapDeleteAllButton() {
+        self.dataSource.deleteAll()
+    }
+
+    @IBAction func didTapAppendButton() {
+        let section = 0
+        self.dataSource.appendItem(section: section)
+        self.dataSource.reloadData(animated: true)
+    }
+
+    @IBAction func didTapAppendSectionsButton() {
+        self.dataSource.appendItem(section: 0)
+        self.dataSource.appendItem(section: 1)
+        self.dataSource.reloadData(animated: true)
+    }
+
+    @IBAction func didTapReloadSectionButton() {
+        let section = 0
+        self.dataSource[section].reloadData(animated: true)
+    }
+
+    @IBAction func didTapReloadSectionsButton() {
+        //        let section = 1
+        self.dataSource.reloadSections(animated: true)
+    }
+
 }
 
 class RxDemoViewModel: Edamame {
     func loadData(_ completion:(_ users: [RxUser]) -> Void) {
         var users = [RxUser]()
-        for _ in 1...10 {
+        for _ in 1...1 {
             users.append(RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "bar", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
             users.append(RxUser(name: "hoge", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
@@ -78,5 +104,50 @@ class RxDemoViewModel: Edamame {
             }
             self.reloadData()
         }
+
+        for section in 0...1 {
+            _ = self[section]
+            self.reloadData()
+        }
+    }
+
+    func deleteAllAndAddItems(section: Int = 0) {
+        let section = self[section]
+        let item = RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments")
+        section.removeAllItems()
+        section.appendItem(item, cellType: RxDemoCell.self)
+        section.appendItem(item, cellType: RxDemoCell.self)
+        self.reloadData(animated: true)
+    }
+    func deleteItem(section: Int = 0) {
+        let section = self[section]
+        if section.numberOfItems > 0 {
+            self.removeItemAtIndexPath(IndexPath(item: 0, section: section.index))
+            self.reloadData(animated: true)
+        }
+    }
+
+    func appendItem(section: Int = 0) {
+        let section = self[section]
+        let item = RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments")
+        section.appendItem(item, cellType: RxDemoCell.self)
+    }
+
+    func deleteAll() {
+        for sectionIndex in 0..<self.collectionView.numberOfSections {
+            let section = self[sectionIndex]
+            section.removeAllItems()
+        }
+        self.reloadData(animated: true)
+    }
+
+    func randomDelete() {
+        guard self.collectionView.numberOfSections > 0 else { return }
+        let randomSection = Int(arc4random_uniform(UInt32(self.collectionView.numberOfSections)))
+        let section = self[randomSection]
+        guard section.numberOfItems > 0 else { return }
+        let randomItem = Int(arc4random_uniform(UInt32(section.numberOfItems)))
+        section.removeItemAtIndex(randomItem)
+        self.reloadData(animated: true)
     }
 }
