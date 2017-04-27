@@ -104,7 +104,11 @@ open class EdamameSection {
         }
         return 0
     }
-    open var hidden: Bool = false
+    open var hidden: Bool = false {
+        didSet {
+            self.dataSource?.setNeedsLayout()
+        }
+    }
     open var inset: UIEdgeInsets?
     open var minimumLineSpacing: CGFloat?
     open var minimumInteritemSpacing: CGFloat?
@@ -152,20 +156,12 @@ public extension EdamameSection {
 
     func appendItem(_ item: Any, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
         let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
-        self.items.append(item)
-
-        // add indexPath for Animation
-        let indexPath = IndexPath(item: self.items.count - 1, section: index)
-        dataSource?._addingIndexPaths.append(indexPath)
+        dataSource?._updates.append(.append(item: item, section: index))
     }
 
     func insertItem(_ item: Any, atIndex: Int, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
         let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
-        self.items.insert(item, at: atIndex)
-
-        // add indexPath for Animation
-        let indexPath = IndexPath(item: atIndex, section: index)
-        dataSource?._addingIndexPaths.append(indexPath)
+        dataSource?._updates.append(.insert(item: item, indexPath: IndexPath(item: atIndex, section: index)))
     }
  
     func appendSupplementaryItem(_ item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
@@ -174,18 +170,24 @@ public extension EdamameSection {
  
     func removeItemAtIndex(_ index: Int) {
         let indexPath = IndexPath(item: index, section: self.index)
-        dataSource?._removingIndexPaths.append(indexPath)
-        
-        self.items.remove(at: index)
+        dataSource?._updates.append(.delete(indexPaths: [indexPath]))
     }
- 
-    func removeAllItems() {
-        for i in 0..<items.count {
-            let indexPath = IndexPath(item: i, section: index)
-            dataSource?._removingIndexPaths.append(indexPath)
-        }
 
-        self.items.removeAll()
+    func removeItems<T>(type: T.Type) {
+        var removeIndexPaths: [IndexPath] = []
+        removeIndexPaths = self.items.enumerated().filter({ $0.1.item is T }).map({ IndexPath(item: $0.0, section: self.index) })
+        if removeIndexPaths.count > 0 {
+            dataSource?._updates.append(.delete(indexPaths: removeIndexPaths))
+        }
+    }
+
+    func removeAllItems() {
+        guard items.count > 0 else { return }
+        var indexPaths: [IndexPath] = []
+        for i in 0..<items.count {
+            indexPaths.append(IndexPath(item: i, section: index))
+        }
+        dataSource?._updates.append(.delete(indexPaths: indexPaths))
     }
  
     func removeSupplementaryItem(_ kind: String) {
@@ -195,16 +197,16 @@ public extension EdamameSection {
     func removeAllSupplementaryItems() {
         self.supplementaryItems.removeAll()
     }
+
+    func reloadData(animated: Bool = false) {
+        dataSource.reloadSection(section: index, animated: animated)
+    }
 }
 
 // MARK: DataSource
 extension EdamameSection {
     func numberOfItemsInCollectionView(_ collectionView: UICollectionView) -> Int {
-        if self.hidden {
-            return 0
-        } else {
-            return items.count
-        }
+        return items.count
     }
 }
 
@@ -217,6 +219,7 @@ extension EdamameSection : FlowLayoutProtocol {
             cell.configure(item.item, collectionView: collectionView, indexPath: indexPath)
             item.isFirstAppearing = false
         }
+        cell.isHidden = hidden
         return cell
     }
 
@@ -231,13 +234,13 @@ extension EdamameSection : FlowLayoutProtocol {
         }
  
         // Experimental
-        if item.size == CGSize.zero {
+        if item.size == CGSize.zero || self.hidden {
             if collectionView.contentSize.width != collectionView.frame.size.width {
                 // horizontal scroll
-                return CGSize(width: 0, height: collectionView.frame.size.height)
+                return CGSize(width: 1, height: collectionView.frame.size.height)
             } else {
                 // vertical scroll
-                return CGSize(width: collectionView.frame.size.width, height: 0)
+                return CGSize(width: collectionView.frame.size.width, height: 1)
             }
         }
         return item.size
@@ -254,7 +257,7 @@ extension EdamameSection : FlowLayoutProtocol {
         }
         return item.size
     }
- 
+
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard !self.hidden else { return CGSize.zero }
         guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
@@ -279,6 +282,7 @@ extension EdamameSection : FlowLayoutProtocol {
             view.configure(item.item, collectionView: collectionView, indexPath: indexPath)
             item.isFirstAppearing = false
         }
+        view.isHidden = hidden
         return view
     }
     
@@ -317,22 +321,32 @@ extension EdamameSection : FlowLayoutProtocol {
 // MARK: - Edamame
 open class Edamame: NSObject {
 
+    enum UpdateType {
+        case append(item: EdamameItem, section: Int)
+        case insert(item: EdamameItem, indexPath: IndexPath)
+        case delete(indexPaths: [IndexPath])
+    }
+
     /// readonly
     fileprivate let _calculateSizeQueue = DispatchQueue(label: "matzo.Edamame", attributes: [])
     fileprivate var _collectionView: UICollectionView
     fileprivate var _sections = [EdamameSection]()
-    fileprivate var _addingIndexPaths: [IndexPath] = []
-    fileprivate var _removingIndexPaths: [IndexPath] = []
-    fileprivate var _isAnimating: Bool = false
+    fileprivate var _updates: [UpdateType] = []
 
     // public
     var hasAcyncSizingItem: Bool {
-        for indexPath in (_addingIndexPaths + _removingIndexPaths) {
-            guard self.sections.count > indexPath.section && self[indexPath.section].items.count > indexPath.item else { continue }
-
-            let item = self[indexPath.section].items[indexPath.item]
-            if item.calculateSizeInBackground && item.needsLayout {
-                return true
+        for update in _updates {
+            switch update {
+            case .append(let item, _):
+                if item.calculateSizeInBackground && item.needsLayout {
+                    return true
+                }
+            case .insert(let item, _):
+                if item.calculateSizeInBackground && item.needsLayout {
+                    return true
+                }
+            case .delete(_):
+                break
             }
         }
         return false
@@ -399,24 +413,35 @@ public extension Edamame {
         self._sections.insert(section, at: atIndex)
     }
 
-    func reloadSections(animated: Bool = false) {
+    func reloadSections(animated: Bool = true) {
         if self.sections.count > 0 {
-            let range = IndexSet(integersIn: NSMakeRange(0, self.sections.count).toRange()!)
-            if animated {
-                self.collectionView.reloadSections(range)
-            } else {
-                UIView.performWithoutAnimation({ () -> Void in
-                    self.collectionView.reloadSections(range)
-                })
+            for section in 0..<self.sections.count {
+                self.reloadSection(section: section, animated: animated)
             }
         }
     }
- 
+
+    func reloadSection(section: Int, animated: Bool = false) {
+        if animated {
+            applyUpdates(section: section)
+            self.collectionView.reloadSections([section])
+        } else {
+            UIView.performWithoutAnimation {
+                applyUpdates(section: section)
+                self.collectionView.reloadData()
+            }
+        }
+
+    }
+
     func setNeedsLayout(animated: Bool = false) {
         let block = {
             for section in self.sections {
                 for item in section.items {
                     item.needsLayout = true
+                }
+                for (_, supplementaryItem) in section.supplementaryItems {
+                    supplementaryItem.needsLayout = true
                 }
             }
             self.calculateSizeInBackground()
@@ -453,36 +478,147 @@ public extension Edamame {
 
     func reloadData(animated: Bool = false) {
         self.calculateSizeInBackground()
-        if animated && !hasAcyncSizingItem && !_isAnimating {
-            _isAnimating = true
+        if animated && !hasAcyncSizingItem {
             self.collectionView.performBatchUpdates(
                 {
-                    if self._addingIndexPaths.count > 0 {
-                        self.collectionView.insertItems(at: self._addingIndexPaths)
-                        self._addingIndexPaths.removeAll()
-                    }
-                    if self._removingIndexPaths.count > 0 {
-                        self.collectionView.deleteItems(at: self._removingIndexPaths)
-                        self._removingIndexPaths.removeAll()
-                    }
+                    self.applyUpdatesAnimating()
                 }, completion: { (done) in
                     self.collectionView.reloadData()
-                    self._isAnimating = false
                 }
             )
         } else {
+            applyUpdates()
             self.collectionView.reloadData()
-            self._addingIndexPaths.removeAll()
-            self._removingIndexPaths.removeAll()
         }
     }
- 
+
+    func applyUpdates() {
+        for update in self._updates {
+            switch update {
+            case .append(let item, let section):
+                self[section].items.append(item)
+            case .insert(let item, let indexPath):
+                self[indexPath.section].items.insert(item, at: indexPath.item)
+            case .delete(let indexPaths):
+                var indexListPerSection: [[Int]] = []
+                for section in 0..<self.collectionView.numberOfSections {
+                    indexListPerSection.append(indexPaths.filter({ $0.section == section }).map({ $0.item }))
+                }
+                for (section, indexList) in indexListPerSection.enumerated() {
+                    let section = self[section]
+                    for removeIndex in indexList.sorted(by: >) {
+                        section.items.remove(at: removeIndex)
+                    }
+                }
+            }
+        }
+        self._updates.removeAll()
+    }
+    func applyUpdates(section sectionIndex: Int) {
+        for update in self._updates {
+            switch update {
+            case .append(let item, let section):
+                guard section == sectionIndex else { continue }
+
+                self[section].items.append(item)
+            case .insert(let item, let indexPath):
+                guard indexPath.section == sectionIndex else { continue }
+
+                self[indexPath.section].items.insert(item, at: indexPath.item)
+            case .delete(let indexPaths):
+                var indexListPerSection: [[Int]] = []
+                for _section in 0..<self.collectionView.numberOfSections {
+                    indexListPerSection.append(indexPaths.filter({ $0.section == _section }).map({ $0.item }))
+                }
+                for (_section, indexList) in indexListPerSection.enumerated() {
+                    guard _section == sectionIndex else { continue }
+
+                    let section = self[_section]
+                    for removeIndex in indexList.sorted(by: >) {
+                        section.items.remove(at: removeIndex)
+                    }
+                }
+            }
+        }
+        var remainedUpdates: [UpdateType] = []
+        for update in _updates {
+            switch update {
+            case .append(_, let section):
+                if section != sectionIndex {
+                    remainedUpdates.append(update)
+                }
+            case .insert(_, let indexPath):
+                if indexPath.section != sectionIndex {
+                    remainedUpdates.append(update)
+                }
+            case .delete(let indexPaths):
+                let remainedDeleteIndexPaths: [IndexPath] = indexPaths.filter({ $0.section != sectionIndex })
+                if remainedDeleteIndexPaths.count > 0 {
+                    remainedUpdates.append(.delete(indexPaths: remainedDeleteIndexPaths))
+                }
+            }
+        }
+        self._updates = remainedUpdates
+    }
+
+    func applyUpdatesAnimating() {
+        var adding: [IndexPath] = []
+        var deleting: [IndexPath] = []
+        for update in self._updates {
+            switch update {
+            case .append(let item, let section):
+                let addingCount = itemsCount(indexPaths: adding, inSection: section)
+                let deletingCount = itemsCount(indexPaths: deleting, inSection: section)
+                let indexPath = IndexPath(item: max(self.collectionView.numberOfItems(inSection: section) - deletingCount + addingCount, 0), section: section)
+                self[section].items.append(item)
+                if deleting.contains(indexPath) {
+                    deleting = deleting.filter({ $0 != indexPath })
+                } else {
+                    adding.append(indexPath)
+                }
+            case .insert(let item, let indexPath):
+                self[indexPath.section].items.insert(item, at: indexPath.item)
+                if deleting.contains(indexPath) {
+                    deleting = deleting.filter({ $0 != indexPath })
+                } else {
+                    adding.append(indexPath)
+                }
+            case .delete(let indexPaths):
+                var indexListPerSection: [[Int]] = []
+                var deleteIndexPaths: [IndexPath] = []
+                for section in 0..<self.collectionView.numberOfSections {
+                    indexListPerSection.append(indexPaths.filter({ $0.section == section }).map({ $0.item }))
+                }
+                for (section, indexList) in indexListPerSection.enumerated() {
+                    let section = self[section]
+                    for removeIndex in indexList.sorted(by: >) {
+                        section.items.remove(at: removeIndex)
+                    }
+                }
+                for indexPath in indexPaths {
+                    if adding.contains(indexPath) {
+                        adding = adding.filter({ $0 != indexPath })
+                    } else {
+                        deleting.append(indexPath)
+                        deleteIndexPaths.append(indexPath)
+                    }
+                }
+            }
+        }
+        self.collectionView.insertItems(at: adding)
+        self.collectionView.deleteItems(at: deleting)
+        self._updates.removeAll()
+    }
+    private func itemsCount(indexPaths: [IndexPath], inSection section: Int) -> Int {
+        return indexPaths.filter({ $0.section == section }).count
+    }
+
     func removeItemAtIndexPath(_ indexPath: IndexPath) {
         self[indexPath.section].removeItemAtIndex(indexPath.item)
     }
- 
+
     func removeAllItems() {
-        self._sections.removeAll()
+        self._sections.forEach({ $0.removeAllItems() })
     }
     
     func calculateSizeInBackground() {
