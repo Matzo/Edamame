@@ -38,7 +38,7 @@
                                 <action selector="didTapDeleteButton" destination="-1" id="QaL-Kp-mDy"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="Del All" id="qwt-4r-ffz" userLabel="Delete Button">
+                        <barButtonItem title="DelAll" id="qwt-4r-ffz" userLabel="Delete Button">
                             <connections>
                                 <action selector="didTapDeleteAllButton" destination="-1" id="Lx7-7A-6fc"/>
                             </connections>
@@ -53,14 +53,14 @@
                                 <action selector="didTapAppendSectionsButton" destination="-1" id="vp5-2N-Qlv"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="Section" id="uFc-5Q-A86" userLabel="Reload Section Button">
+                        <barButtonItem title="ReloadSec" id="uFc-5Q-A86" userLabel="Reload Section Button">
                             <connections>
                                 <action selector="didTapReloadSectionButton" destination="-1" id="ngE-YS-UNF"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem title="Sections" id="9L3-9w-Ocn" userLabel="Reload Sections Button">
+                        <barButtonItem title="DelSec" id="9L3-9w-Ocn" userLabel="Reload Sections Button">
                             <connections>
-                                <action selector="didTapReloadSectionsButton" destination="-1" id="7an-Mp-WNF"/>
+                                <action selector="didTapRemeveSectionButton" destination="-1" id="Hxo-vp-GMs"/>
                             </connections>
                         </barButtonItem>
                     </items>
@@ -76,6 +76,7 @@
                 <constraint firstItem="UAQ-u7-DEX" firstAttribute="top" secondItem="NCb-lS-2eJ" secondAttribute="bottom" id="aC4-dM-FAt"/>
                 <constraint firstAttribute="trailing" secondItem="UAQ-u7-DEX" secondAttribute="trailing" id="boB-LK-0yT"/>
             </constraints>
+            <point key="canvasLocation" x="78" y="54"/>
         </view>
     </objects>
 </document>

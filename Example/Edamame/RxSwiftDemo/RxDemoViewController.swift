@@ -72,9 +72,11 @@ class RxDemoViewController: UIViewController {
         self.dataSource[section].reloadData(animated: true)
     }
 
-    @IBAction func didTapReloadSectionsButton() {
-        //        let section = 1
-        self.dataSource.reloadSections(animated: true)
+    @IBAction func didTapRemeveSectionButton() {
+        let section = 0
+        self.dataSource.removeSection(index: section, animated: true)
+        _ = self.dataSource.createSection()
+        self.dataSource.reloadData()
     }
 
 }

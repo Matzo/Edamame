@@ -479,13 +479,11 @@ public extension Edamame {
     func reloadData(animated: Bool = false) {
         self.calculateSizeInBackground()
         if animated && !hasAcyncSizingItem {
-            self.collectionView.performBatchUpdates(
-                {
-                    self.applyUpdatesAnimating()
-                }, completion: { (done) in
-                    self.collectionView.reloadData()
-                }
-            )
+            self.collectionView.performBatchUpdates({
+                self.applyUpdatesAnimating()
+            }, completion: { (done) in
+                self.collectionView.reloadData()
+            })
         } else {
             applyUpdates()
             self.collectionView.reloadData()
@@ -620,7 +618,32 @@ public extension Edamame {
     func removeAllItems() {
         self._sections.forEach({ $0.removeAllItems() })
     }
-    
+
+    func removeSections(indexSet: IndexSet, animated: Bool = false) {
+        guard indexSet.filter({ self._sections.count > $0 }).count == indexSet.count else { return }
+        var filteredSections: [EdamameSection] = []
+        for (index, section) in self._sections.enumerated() {
+            if !indexSet.contains(index) {
+                filteredSections.append(section)
+            }
+        }
+        if animated {
+            self.collectionView.performBatchUpdates({
+                self._sections = filteredSections
+                self.collectionView.deleteSections(indexSet)
+            }, completion: { (done) in
+                self.collectionView.reloadData()
+            })
+        } else {
+            self._sections = filteredSections
+            self.collectionView.reloadData()
+        }
+    }
+
+    func removeSection(index: Int, animated: Bool = false) {
+        self.removeSections(indexSet: [index], animated: animated)
+    }
+
     func calculateSizeInBackground() {
         if !hasAcyncSizingItem {
             return
@@ -654,23 +677,39 @@ public extension Edamame {
 // MARK: UICollectionViewDelegateFlowLayout
 extension Edamame: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let section = sections[indexPath.section]
-        return section.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAtIndexPath: indexPath)
+        if sections.count > indexPath.section {
+            let section = sections[indexPath.section]
+            return section.collectionView(collectionView, layout: collectionViewLayout, sizeForItemAtIndexPath: indexPath)
+        } else {
+            return CGSize.zero
+        }
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let sectionItem = sections[section]
-        return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForHeaderInSection: section)
+        if sections.count > section {
+            let sectionItem = sections[section]
+            return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForHeaderInSection: section)
+        } else {
+            return CGSize.zero
+        }
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        let sectionItem = sections[section]
-        return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForFooterInSection: section)
+        if sections.count > section {
+            let sectionItem = sections[section]
+            return sectionItem.collectionView(collectionView, layout: collectionViewLayout, referenceSizeForFooterInSection: section)
+        } else {
+            return CGSize.zero
+        }
     }
     
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let sectionItem = sections[section]
-        return sectionItem.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAtIndex: section)
+        if sections.count > section {
+            let sectionItem = sections[section]
+            return sectionItem.collectionView(collectionView, layout: collectionViewLayout, insetForSectionAtIndex: section)
+        } else {
+            return UIEdgeInsets.zero
+        }
     }
 
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -678,10 +717,18 @@ extension Edamame: UICollectionViewDelegateFlowLayout {
     }
 
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return sections[section].collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAtIndex: section)
+        if sections.count > section {
+            return sections[section].collectionView(collectionView, layout: collectionViewLayout, minimumInteritemSpacingForSectionAtIndex: section)
+        } else {
+            return 0
+        }
     }
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return sections[section].collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAtIndex: section)
+        if sections.count > section {
+            return sections[section].collectionView(collectionView, layout: collectionViewLayout, minimumLineSpacingForSectionAtIndex: section)
+        } else {
+            return 0
+        }
     }
 }
 
