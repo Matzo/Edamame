@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = "Edamame"
-  s.version          = "1.2.1"
+  s.version          = "1.2.2"
   s.summary          = "Edamame makes UICollectionView easy to use."
   s.description      = <<-DESC
   Edamame supports followings.
