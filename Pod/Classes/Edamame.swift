@@ -250,8 +250,8 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize(width: 0.1, height: 0.1) }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize(width: 0.1, height: 0.1) }
+        guard !self.hidden else { return CGSize(width: 0.001, height: 0.001) }
+        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize(width: 0.001, height: 0.001) }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -262,8 +262,8 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize(width: 0.1, height: 0.1) }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize(width: 0.1, height: 0.1) }
+        guard !self.hidden else { return CGSize(width: 0.001, height: 0.001) }
+        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize(width: 0.001, height: 0.001) }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
