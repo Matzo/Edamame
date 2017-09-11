@@ -18,6 +18,7 @@ class RxDemoViewController: UIViewController {
             collectionView.alwaysBounceVertical = true
         }
     }
+
     @IBOutlet weak var addButton: UIBarButtonItem!
     
     lazy var dataSource: RxDemoViewModel = {
@@ -79,9 +80,21 @@ class RxDemoViewController: UIViewController {
         self.dataSource.reloadData()
     }
 
+    @IBAction func didTapAddSectionHeaderButton() {
+        let section = 0
+        self.dataSource.addHeader(section: section)
+        self.dataSource.reloadData(animated: true)
+    }
+
+    @IBAction func didTapRemoveSectionHeaderButton() {
+        let section = 0
+        self.dataSource.deleteHeader(section: section)
+        self.dataSource.reloadData(animated: true)
+    }
 }
 
 class RxDemoViewModel: Edamame {
+
     func loadData(_ completion:(_ users: [RxUser]) -> Void) {
         var users = [RxUser]()
         for _ in 1...1 {
@@ -92,8 +105,11 @@ class RxDemoViewModel: Edamame {
         }
         completion(users)
     }
+
     func setup() {
         self.registerNibFromClass(RxDemoCell.self)
+        self.registerNibFromClass(RxDemoHeaderCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader)
+
         self.loadData { (users) -> Void in
             let section = self.createSection()
             section.minimumLineSpacing = 0
@@ -121,6 +137,7 @@ class RxDemoViewModel: Edamame {
         section.appendItem(item, cellType: RxDemoCell.self)
         self.reloadData(animated: true)
     }
+
     func deleteItem(section: Int = 0) {
         let section = self[section]
         if section.numberOfItems > 0 {
@@ -139,6 +156,7 @@ class RxDemoViewModel: Edamame {
         for sectionIndex in 0..<self.collectionView.numberOfSections {
             let section = self[sectionIndex]
             section.removeAllItems()
+            section.removeSupplementaryItem(UICollectionElementKindSectionHeader)
         }
         self.reloadData(animated: true)
     }
@@ -151,5 +169,15 @@ class RxDemoViewModel: Edamame {
         let randomItem = Int(arc4random_uniform(UInt32(section.numberOfItems)))
         section.removeItemAtIndex(randomItem)
         self.reloadData(animated: true)
+    }
+
+    func addHeader(section: Int = 0) {
+        let section = self[section]
+        section.appendSupplementaryItem("Section \(section.index) Header", kind: UICollectionElementKindSectionHeader, viewType: RxDemoHeaderCell.self)
+    }
+
+    func deleteHeader(section: Int = 0) {
+        let section = self[section]
+        section.removeSupplementaryItem(UICollectionElementKindSectionHeader)
     }
 }
