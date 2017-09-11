@@ -165,7 +165,8 @@ public extension EdamameSection {
     }
  
     func appendSupplementaryItem(_ item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
-        self.supplementaryItems[kind] = EdamameSupplementaryItem(item: item, viewType: viewType ?? self.cellType)
+        let item = EdamameSupplementaryItem(item: item, viewType: viewType ?? self.cellType)
+        dataSource?._updates.append(.appendSupplementary(item: item, kind: kind, section: index))
     }
  
     func removeItemAtIndex(_ index: Int) {
@@ -191,11 +192,13 @@ public extension EdamameSection {
     }
  
     func removeSupplementaryItem(_ kind: String) {
-        self.supplementaryItems[kind] = nil
+        dataSource?._updates.append(.deleteSupplementary(kind: kind, section: index))
     }
  
     func removeAllSupplementaryItems() {
-        self.supplementaryItems.removeAll()
+        for (kind, _) in supplementaryItems {
+            dataSource?._updates.append(.deleteSupplementary(kind: kind, section: index))
+        }
     }
 
     func reloadData(animated: Bool = false) {
@@ -247,8 +250,8 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize.zero }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize.zero }
+        guard !self.hidden else { return CGSize(width: 0.1, height: 0.1) }
+        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize(width: 0.1, height: 0.1) }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -259,8 +262,8 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize.zero }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
+        guard !self.hidden else { return CGSize(width: 0.1, height: 0.1) }
+        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize(width: 0.1, height: 0.1) }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -325,6 +328,8 @@ open class Edamame: NSObject {
         case append(item: EdamameItem, section: Int)
         case insert(item: EdamameItem, indexPath: IndexPath)
         case delete(indexPaths: [IndexPath])
+        case appendSupplementary(item: EdamameSupplementaryItem, kind: String, section: Int)
+        case deleteSupplementary(kind: String, section: Int)
     }
 
     /// readonly
@@ -346,6 +351,8 @@ open class Edamame: NSObject {
                     return true
                 }
             case .delete(_):
+                break
+            case .appendSupplementary(_, _, _), .deleteSupplementary(_, _):
                 break
             }
         }
@@ -508,6 +515,10 @@ public extension Edamame {
                         section.items.remove(at: removeIndex)
                     }
                 }
+            case .appendSupplementary(let item, let kind, let section):
+                self[section].supplementaryItems[kind] = item
+            case .deleteSupplementary(let kind, let section):
+                self[section].supplementaryItems[kind] = nil
             }
         }
         self._updates.removeAll()
@@ -536,6 +547,14 @@ public extension Edamame {
                         section.items.remove(at: removeIndex)
                     }
                 }
+            case .appendSupplementary(let item, let kind, let section):
+                guard section == sectionIndex else { continue }
+
+                self[section].supplementaryItems[kind] = item
+            case .deleteSupplementary(let kind, let section):
+                guard section == sectionIndex else { continue }
+
+                self[section].supplementaryItems[kind] = nil
             }
         }
         var remainedUpdates: [UpdateType] = []
@@ -554,6 +573,10 @@ public extension Edamame {
                 if remainedDeleteIndexPaths.count > 0 {
                     remainedUpdates.append(.delete(indexPaths: remainedDeleteIndexPaths))
                 }
+            case .appendSupplementary(_, _, _):
+                break
+            case .deleteSupplementary(_, _):
+                break
             }
         }
         self._updates = remainedUpdates
@@ -601,6 +624,10 @@ public extension Edamame {
                         deleteIndexPaths.append(indexPath)
                     }
                 }
+            case .appendSupplementary(let item, let kind, let section):
+                self[section].supplementaryItems[kind] = item
+            case .deleteSupplementary(let kind, let section):
+                self[section].supplementaryItems[kind] = nil
             }
         }
         self.collectionView.insertItems(at: adding)

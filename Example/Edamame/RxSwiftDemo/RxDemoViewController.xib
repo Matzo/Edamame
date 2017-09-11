@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,11 +18,11 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <rect key="frame" x="0.0" y="44" width="375" height="623"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="NCb-lS-2eJ">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="579"/>
                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="7mb-FC-V9h">
                         <size key="itemSize" width="50" height="50"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -31,7 +31,7 @@
                     </collectionViewFlowLayout>
                 </collectionView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UAQ-u7-DEX">
-                    <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                    <rect key="frame" x="0.0" y="579" width="375" height="44"/>
                     <items>
                         <barButtonItem title="Del" id="NG5-Ic-mJm" userLabel="Delete Button">
                             <connections>
@@ -65,6 +65,48 @@
                         </barButtonItem>
                     </items>
                 </toolbar>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wnH-lt-cuY">
+                    <rect key="frame" x="0.0" y="535" width="375" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EG7-J8-NAI">
+                            <rect key="frame" x="0.0" y="0.0" width="60" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="8yb-W2-EW1"/>
+                                <constraint firstAttribute="width" constant="60" id="U0b-8b-ez4"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="15"/>
+                            <state key="normal">
+                                <string key="title">Add
+Header</string>
+                            </state>
+                            <connections>
+                                <action selector="didTapAddSectionHeaderButton" destination="-1" eventType="touchUpInside" id="Yng-bT-tzA"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X3h-Qj-OOJ">
+                            <rect key="frame" x="60" y="0.0" width="60" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="E0o-j1-x9M"/>
+                                <constraint firstAttribute="width" constant="60" id="mN2-UL-5om"/>
+                            </constraints>
+                            <state key="normal">
+                                <string key="title">Delete
+Header</string>
+                            </state>
+                            <connections>
+                                <action selector="didTapRemoveSectionHeaderButton" destination="-1" eventType="touchUpInside" id="Czz-6Q-85H"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="IuS-Ll-fVC"/>
+                        <constraint firstItem="EG7-J8-NAI" firstAttribute="centerY" secondItem="wnH-lt-cuY" secondAttribute="centerY" id="MFS-Rb-mvT"/>
+                        <constraint firstItem="EG7-J8-NAI" firstAttribute="leading" secondItem="wnH-lt-cuY" secondAttribute="leading" id="Tvo-fN-hlV"/>
+                        <constraint firstItem="X3h-Qj-OOJ" firstAttribute="leading" secondItem="EG7-J8-NAI" secondAttribute="trailing" id="VgU-VY-Y6p"/>
+                        <constraint firstItem="X3h-Qj-OOJ" firstAttribute="centerY" secondItem="wnH-lt-cuY" secondAttribute="centerY" id="vix-Nw-HXL"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -73,10 +115,15 @@
                 <constraint firstAttribute="bottom" secondItem="UAQ-u7-DEX" secondAttribute="bottom" id="8CQ-ff-H1z"/>
                 <constraint firstAttribute="trailing" secondItem="NCb-lS-2eJ" secondAttribute="trailing" id="QdA-vY-uAZ"/>
                 <constraint firstItem="NCb-lS-2eJ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="RX2-6l-f3j"/>
+                <constraint firstItem="wnH-lt-cuY" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="To8-xa-T0e"/>
                 <constraint firstItem="UAQ-u7-DEX" firstAttribute="top" secondItem="NCb-lS-2eJ" secondAttribute="bottom" id="aC4-dM-FAt"/>
                 <constraint firstAttribute="trailing" secondItem="UAQ-u7-DEX" secondAttribute="trailing" id="boB-LK-0yT"/>
+                <constraint firstAttribute="trailing" secondItem="wnH-lt-cuY" secondAttribute="trailing" id="mz2-47-hsL"/>
+                <constraint firstItem="UAQ-u7-DEX" firstAttribute="top" secondItem="wnH-lt-cuY" secondAttribute="bottom" id="sPN-zr-aDc"/>
             </constraints>
-            <point key="canvasLocation" x="78" y="54"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+            <point key="canvasLocation" x="77.5" y="53.5"/>
         </view>
     </objects>
 </document>
