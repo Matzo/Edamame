@@ -19,8 +19,6 @@ class RxDemoViewController: UIViewController {
         }
     }
 
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    
     lazy var dataSource: RxDemoViewModel = {
         let ds = RxDemoViewModel(collectionView: self.collectionView)
         return ds
@@ -48,8 +46,7 @@ class RxDemoViewController: UIViewController {
     }
     
     @IBAction func didTapDeleteButton() {
-        let section = 0
-        self.dataSource.deleteAllAndAddItems(section: section)
+        self.dataSource.deleteItem()
     }
 
     @IBAction func didTapDeleteAllButton() {
@@ -115,9 +112,9 @@ class RxDemoViewModel: Edamame {
             section.minimumLineSpacing = 0
             section.minimumInteritemSpacing = 0
             for user in users {
-                section.appendItem(user, cellType: RxDemoCell.self) { (item, indexPath) -> Void in
+                section.appendItem(user, cellType: RxDemoCell.self) { [weak self] (item, indexPath) -> Void in
                     guard let user = item as? RxUser else { return }
-                    user.message = user.message + " tapped"
+                    self?.didTapUser(user: user)
                 }
             }
             self.reloadData()
@@ -126,6 +123,21 @@ class RxDemoViewModel: Edamame {
         for section in 0...1 {
             _ = self[section]
             self.reloadData()
+        }
+    }
+
+    func didTapUser(user: RxUser) {
+        var targetIndexPaths: [IndexPath] = []
+        self.sections.enumerated().forEach { (index, section) in
+            section.items(RxUser.self).enumerated().forEach({ (index, _user) in
+                if _user.name == user.name {
+                    _user.message += " tapped"
+                    targetIndexPaths.append(IndexPath(item: index, section: section.index))
+                }
+            })
+        }
+        targetIndexPaths.forEach { (indexPath) in
+            self.setNeedsLayout(indexPath, animated: true)
         }
     }
 
@@ -149,7 +161,10 @@ class RxDemoViewModel: Edamame {
     func appendItem(section: Int = 0) {
         let section = self[section]
         let item = RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments")
-        section.appendItem(item, cellType: RxDemoCell.self)
+        section.appendItem(item, cellType: RxDemoCell.self) { [weak self] (item, indexPath) -> Void in
+            guard let user = item as? RxUser else { return }
+            self?.didTapUser(user: user)
+        }
     }
 
     func deleteAll() {

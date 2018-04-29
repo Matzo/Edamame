@@ -104,11 +104,6 @@ open class EdamameSection {
         }
         return 0
     }
-    open var hidden: Bool = false {
-        didSet {
-            self.dataSource?.setNeedsLayout()
-        }
-    }
     open var inset: UIEdgeInsets?
     open var minimumLineSpacing: CGFloat?
     open var minimumInteritemSpacing: CGFloat?
@@ -193,10 +188,12 @@ public extension EdamameSection {
  
     func removeSupplementaryItem(_ kind: String) {
         dataSource?._updates.append(.deleteSupplementary(kind: kind, section: index))
+        self.dataSource.collectionView.collectionViewLayout.invalidateLayout()
     }
  
     func removeAllSupplementaryItems() {
         for (kind, _) in supplementaryItems {
+            self.supplementaryItems[kind] = nil
             dataSource?._updates.append(.deleteSupplementary(kind: kind, section: index))
         }
     }
@@ -222,7 +219,6 @@ extension EdamameSection : FlowLayoutProtocol {
             cell.configure(item.item, collectionView: collectionView, indexPath: indexPath)
             item.isFirstAppearing = false
         }
-        cell.isHidden = hidden
         return cell
     }
 
@@ -235,23 +231,11 @@ extension EdamameSection : FlowLayoutProtocol {
                 item.needsLayout = false
             }
         }
- 
-        // Experimental
-        if item.size == CGSize.zero || self.hidden {
-            if collectionView.contentSize.width != collectionView.frame.size.width {
-                // horizontal scroll
-                return CGSize(width: 1, height: collectionView.frame.size.height)
-            } else {
-                // vertical scroll
-                return CGSize(width: collectionView.frame.size.width, height: 1)
-            }
-        }
         return item.size
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize(width: 0.001, height: 0.001) }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize(width: 0.001, height: 0.001) }
+        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -262,8 +246,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize(width: 0.001, height: 0.001) }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize(width: 0.001, height: 0.001) }
+        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -274,9 +257,6 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView {
-        guard !self.hidden else {
-            return dataSource.dequeueReusableCell(kind, withReuseType: UICollectionReusableView.self, forIndexPath: indexPath)
-        }
         guard let item = supplementaryItems[kind] else {
             return dataSource.dequeueReusableCell(kind, withReuseType: UICollectionReusableView.self, forIndexPath: indexPath)
         }
@@ -285,14 +265,10 @@ extension EdamameSection : FlowLayoutProtocol {
             view.configure(item.item, collectionView: collectionView, indexPath: indexPath)
             item.isFirstAppearing = false
         }
-        view.isHidden = hidden
         return view
     }
     
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        if self.hidden {
-            return UIEdgeInsets.zero
-        }
         if let inset = inset {
             return inset
         } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
@@ -522,6 +498,7 @@ public extension Edamame {
             }
         }
         self._updates.removeAll()
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
     func applyUpdates(section sectionIndex: Int) {
         for update in self._updates {
@@ -580,6 +557,7 @@ public extension Edamame {
             }
         }
         self._updates = remainedUpdates
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
     func applyUpdatesAnimating() {
@@ -633,6 +611,7 @@ public extension Edamame {
         self.collectionView.insertItems(at: adding)
         self.collectionView.deleteItems(at: deleting)
         self._updates.removeAll()
+        self.collectionView.collectionViewLayout.invalidateLayout()
     }
     private func itemsCount(indexPaths: [IndexPath], inSection section: Int) -> Int {
         return indexPaths.filter({ $0.section == section }).count
