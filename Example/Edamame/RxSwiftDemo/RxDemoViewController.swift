@@ -88,6 +88,12 @@ class RxDemoViewController: UIViewController {
         self.dataSource.deleteHeader(section: section)
         self.dataSource.reloadData(animated: true)
     }
+
+    @IBAction func didTapToggleSectionButton() {
+        let section = 0
+        self.dataSource[section].hidden = !self.dataSource[section].hidden
+        self.dataSource.reloadData(animated: false)
+    }
 }
 
 class RxDemoViewModel: Edamame {

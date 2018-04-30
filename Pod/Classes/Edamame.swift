@@ -96,6 +96,10 @@ open class EdamameSection {
         return items.count
     }
 
+    open var numberOfVisibleItems: Int {
+        return hidden ? 0 : items.count
+    }
+
     open var index: Int {
         for (index, section) in dataSource.sections.enumerated() {
             if section === self {
@@ -103,6 +107,11 @@ open class EdamameSection {
             }
         }
         return 0
+    }
+    open var hidden: Bool = false {
+        didSet {
+            self.dataSource?.setNeedsLayout()
+        }
     }
     open var inset: UIEdgeInsets?
     open var minimumLineSpacing: CGFloat?
@@ -206,7 +215,7 @@ public extension EdamameSection {
 // MARK: DataSource
 extension EdamameSection {
     func numberOfItemsInCollectionView(_ collectionView: UICollectionView) -> Int {
-        return items.count
+        return numberOfVisibleItems
     }
 }
 
@@ -223,6 +232,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
+        guard !self.hidden else { return CGSize.zero }
         guard items.count > indexPath.item else { return CGSize.zero }
         let item = items[indexPath.item]
         if item.needsLayout && !item.calculateSizeInBackground {
@@ -235,6 +245,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
  
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard !self.hidden else { return CGSize.zero }
         guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
@@ -246,6 +257,7 @@ extension EdamameSection : FlowLayoutProtocol {
     }
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard !self.hidden else { return CGSize.zero }
         guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
@@ -269,6 +281,9 @@ extension EdamameSection : FlowLayoutProtocol {
     }
     
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        if self.hidden {
+            return UIEdgeInsets.zero
+        }
         if let inset = inset {
             return inset
         } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
@@ -613,6 +628,7 @@ public extension Edamame {
         self._updates.removeAll()
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
+
     private func itemsCount(indexPaths: [IndexPath], inSection section: Int) -> Int {
         return indexPaths.filter({ $0.section == section }).count
     }

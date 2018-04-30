@@ -96,13 +96,23 @@ Header</string>
                                 <action selector="didTapRemoveSectionHeaderButton" destination="-1" eventType="touchUpInside" id="Czz-6Q-85H"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HZK-qE-ofV">
+                            <rect key="frame" x="120" y="0.0" width="50" height="44"/>
+                            <state key="normal" title="Hidden"/>
+                            <connections>
+                                <action selector="didTapToggleSectionButton" destination="-1" eventType="touchUpInside" id="siG-Co-4um"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="HZK-qE-ofV" firstAttribute="top" secondItem="wnH-lt-cuY" secondAttribute="top" id="6H4-WL-cHi"/>
                         <constraint firstAttribute="height" constant="44" id="IuS-Ll-fVC"/>
                         <constraint firstItem="EG7-J8-NAI" firstAttribute="centerY" secondItem="wnH-lt-cuY" secondAttribute="centerY" id="MFS-Rb-mvT"/>
                         <constraint firstItem="EG7-J8-NAI" firstAttribute="leading" secondItem="wnH-lt-cuY" secondAttribute="leading" id="Tvo-fN-hlV"/>
                         <constraint firstItem="X3h-Qj-OOJ" firstAttribute="leading" secondItem="EG7-J8-NAI" secondAttribute="trailing" id="VgU-VY-Y6p"/>
+                        <constraint firstItem="HZK-qE-ofV" firstAttribute="leading" secondItem="X3h-Qj-OOJ" secondAttribute="trailing" id="lPo-jA-hZB"/>
+                        <constraint firstAttribute="bottom" secondItem="HZK-qE-ofV" secondAttribute="bottom" id="s8Y-cZ-6KX"/>
                         <constraint firstItem="X3h-Qj-OOJ" firstAttribute="centerY" secondItem="wnH-lt-cuY" secondAttribute="centerY" id="vix-Nw-HXL"/>
                     </constraints>
                 </view>
