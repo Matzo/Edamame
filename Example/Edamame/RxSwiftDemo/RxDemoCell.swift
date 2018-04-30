@@ -8,7 +8,6 @@
 
 import UIKit
 import Edamame
-import MirrorObject
 import RxSwift
 import RxCocoa
 
@@ -35,31 +34,21 @@ class RxDemoCell: UICollectionViewCell, EdamameCell {
         user.rx.observeWeakly(String.self, "message").subscribe(onNext: { [weak self] (message) in
             guard let _self = self else { return }
             _self.messageLabel.text = message
-            collectionView.edamame?.setNeedsLayout(indexPath, animated: true)
-        }).addDisposableTo(disposeBag)
+        }).disposed(by: disposeBag)
     }
     
     static func sizeForItem(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.size.width * 0.5
+        let width = floor(collectionView.frame.size.width * 0.5)
         return calculateSize(item, collectionView: collectionView, indexPath: indexPath, cell: self.viewHolder, width: width)
     }
 }
 
-class RxUser: NSObject, MirrorObject {
+class RxUser: NSObject {
     var name: String
-    dynamic var message: String
+    @objc dynamic var message: String
     init(name: String, message: String) {
         self.name = name
         self.message = message
         super.init()
-        startMirroring()
-    }
-    
-    func identifier() -> String {
-        return name
-    }
-    
-    deinit {
-        stopMirroring()
     }
 }

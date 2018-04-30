@@ -46,13 +46,13 @@ class DemoViewController: UIViewController {
         navigationItem.rightBarButtonItems = [addButton, removeButton]
     }
     
-    func insertCell() {
+    @objc func insertCell() {
         let user = User(name: "Added")
         dataSource[0].insertItem(user, atIndex: 0)
         dataSource.reloadData(animated: true)
     }
     
-    func removeCell() {
+    @objc func removeCell() {
         if dataSource[0].numberOfItems > 0 {
             dataSource[0].removeItemAtIndex(0)
             dataSource.reloadData(animated: true)
@@ -145,24 +145,6 @@ class DemoViewModel: Edamame {
                 section.appendItem(user)
             }
             
-            self.reloadData()
-        }
-
-        // Hidden section Demo
-        self.loadData { (users) -> Void in
-            let section = self[4]
-            section.hidden = true
-            section.minimumInteritemSpacing = 0
-            section.minimumLineSpacing = 0
-            section.setCellType(DemoCell.self)
-            section.inset = UIEdgeInsets(top: 32, left: 16, bottom: 32, right: 16)
-            section.appendSupplementaryItem("Hidden Header Name", kind: UICollectionElementKindSectionHeader, viewType: DemoHeaderView.self)
-            section.appendSupplementaryItem("Hidden Footer Name", kind: UICollectionElementKindSectionFooter, viewType: DemoHeaderView.self)
-
-            for user in users {
-                section.appendItem(user)
-            }
-
             self.reloadData()
         }
 
