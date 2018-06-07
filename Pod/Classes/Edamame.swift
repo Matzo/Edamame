@@ -420,7 +420,7 @@ public extension Edamame {
     }
 
     func reloadSection(section: Int, animated: Bool = false) {
-        if animated {
+        if animated && !self[section].hidden {
             applyUpdates(section: section)
             self.collectionView.reloadSections([section])
         } else {
@@ -476,6 +476,7 @@ public extension Edamame {
 
     func reloadData(animated: Bool = false) {
         self.calculateSizeInBackground()
+        self.reloadHiddenSections()
         if animated && !hasAcyncSizingItem {
             self.collectionView.performBatchUpdates({
                 self.applyUpdatesAnimating()
@@ -485,6 +486,13 @@ public extension Edamame {
         } else {
             applyUpdates()
             self.collectionView.reloadData()
+        }
+    }
+
+    func reloadHiddenSections() {
+        sections.forEach { (section) in
+            guard section.hidden else { return }
+            reloadSection(section: section.index, animated: false)
         }
     }
 
@@ -565,10 +573,14 @@ public extension Edamame {
                 if remainedDeleteIndexPaths.count > 0 {
                     remainedUpdates.append(.delete(indexPaths: remainedDeleteIndexPaths))
                 }
-            case .appendSupplementary(_, _, _):
-                break
-            case .deleteSupplementary(_, _):
-                break
+            case .appendSupplementary(_, _, let section):
+                if section != sectionIndex {
+                    remainedUpdates.append(update)
+                }
+            case .deleteSupplementary(_, let section):
+                if section != sectionIndex {
+                    remainedUpdates.append(update)
+                }
             }
         }
         self._updates = remainedUpdates
