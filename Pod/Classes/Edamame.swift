@@ -398,6 +398,7 @@ public extension Edamame {
         } else {
             self.appendSection(section)
         }
+        section.reloadData(animated: false)
         return section
     }
 
