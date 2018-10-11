@@ -39,3 +39,10 @@ class User {
         self.name = name
     }
 }
+
+extension User: Equatable {
+    static func == (lhs: User, rhs: User) -> Bool {
+        guard lhs.name == rhs.name else { return false }
+        return true
+    }
+}
