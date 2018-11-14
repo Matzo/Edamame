@@ -46,7 +46,7 @@ public extension EdamameCell {
         cell.setNeedsLayout()
         cell.layoutIfNeeded()
 
-        let size = cell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+        let size = cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         cell.contentView.removeConstraint(widthConstraint)
         cell.contentView.translatesAutoresizingMaskIntoConstraints = translatesAutoresizingMaskIntoConstraints
 
@@ -267,7 +267,7 @@ extension EdamameSection : FlowLayoutProtocol {
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         guard !self.hidden else { return CGSize.zero }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionHeader] else { return CGSize.zero }
+        guard let item = self.supplementaryItems[UICollectionView.elementKindSectionHeader] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -279,7 +279,7 @@ extension EdamameSection : FlowLayoutProtocol {
 
     @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         guard !self.hidden else { return CGSize.zero }
-        guard let item = self.supplementaryItems[UICollectionElementKindSectionFooter] else { return CGSize.zero }
+        guard let item = self.supplementaryItems[UICollectionView.elementKindSectionFooter] else { return CGSize.zero }
         if item.needsLayout {
             if let viewType = item.viewType as? EdamameSupplementaryView.Type {
                 item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
@@ -381,8 +381,8 @@ open class Edamame: NSObject {
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
         self.registerClassFromClass(UICollectionViewCell.self)
-        self.registerClassFromClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader)
-        self.registerClassFromClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter)
+        self.registerClassFromClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        self.registerClassFromClass(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }
 }
 

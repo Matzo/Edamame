@@ -111,7 +111,7 @@ class RxDemoViewModel: Edamame {
 
     func setup() {
         self.registerNibFromClass(RxDemoCell.self)
-        self.registerNibFromClass(RxDemoHeaderCell.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader)
+        self.registerNibFromClass(RxDemoHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 
         self.loadData { (users) -> Void in
             let section = self.createSection()
@@ -177,7 +177,7 @@ class RxDemoViewModel: Edamame {
         for sectionIndex in 0..<self.collectionView.numberOfSections {
             let section = self[sectionIndex]
             section.removeAllItems()
-            section.removeSupplementaryItem(UICollectionElementKindSectionHeader)
+            section.removeSupplementaryItem(UICollectionView.elementKindSectionHeader)
         }
         self.reloadData(animated: true)
     }
@@ -194,11 +194,11 @@ class RxDemoViewModel: Edamame {
 
     func addHeader(section: Int = 0) {
         let section = self[section]
-        section.appendSupplementaryItem("Section \(section.index) Header", kind: UICollectionElementKindSectionHeader, viewType: RxDemoHeaderCell.self)
+        section.appendSupplementaryItem("Section \(section.index) Header", kind: UICollectionView.elementKindSectionHeader, viewType: RxDemoHeaderCell.self)
     }
 
     func deleteHeader(section: Int = 0) {
         let section = self[section]
-        section.removeSupplementaryItem(UICollectionElementKindSectionHeader)
+        section.removeSupplementaryItem(UICollectionView.elementKindSectionHeader)
     }
 }

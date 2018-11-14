@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = "Edamame"
-  s.version          = "1.2.7"
+  s.version          = "1.3.0"
   s.summary          = "Edamame makes UICollectionView easy to use."
   s.description      = <<-DESC
   Edamame supports followings.
@@ -12,14 +12,12 @@ Pod::Spec.new do |s|
   - Culclate cell size in background thread. (yet)
   - You can use original layout.
                        DESC
-
   s.homepage         = "https://github.com/Matzo/Edamame"
   s.license          = 'MIT'
   s.author           = { "Matzo" => "ksk.matsuo@gmail.com" }
   s.source           = { :git => "https://github.com/Matzo/Edamame.git", :tag => s.version.to_s }
-
-  s.platform     = :ios, '9.0'
+  s.platform     = :ios, '10.0'
   s.requires_arc = true
-
+  s.swift_version = "4.2"
   s.source_files = 'Pod/Classes/**/*'
 end
