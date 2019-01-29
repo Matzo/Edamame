@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zyr-op-o8X">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Zyr-op-o8X">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,7 +14,7 @@
             <objects>
                 <navigationController id="Zyr-op-o8X" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6al-MY-lu4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -39,15 +38,15 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzw-Uf-hhT">
-                                <rect key="frame" x="16" y="84" width="182" height="30"/>
+                                <rect key="frame" x="16" y="84" width="343" height="30"/>
                                 <state key="normal" title="Open DemoViewController"/>
                                 <connections>
                                     <action selector="openDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="PXT-ca-tMH"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gQ5-ss-O2a">
-                                <rect key="frame" x="16" y="122" width="199" height="30"/>
-                                <state key="normal" title="Open RxDemoViewController"/>
+                                <rect key="frame" x="16" y="122" width="343" height="30"/>
+                                <state key="normal" title="Open ModifyDemoViewController"/>
                                 <connections>
                                     <action selector="openRxDemoViewController" destination="vXZ-lx-hvc" eventType="touchUpInside" id="GJ9-Ih-IvV"/>
                                 </connections>
@@ -58,7 +57,9 @@
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="20" id="11d-jw-42A"/>
                             <constraint firstItem="gQ5-ss-O2a" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="WNm-rt-BH7"/>
                             <constraint firstItem="gQ5-ss-O2a" firstAttribute="top" secondItem="hzw-Uf-hhT" secondAttribute="bottom" constant="8" id="YFc-dO-F9c"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="hzw-Uf-hhT" secondAttribute="trailing" id="aIo-ng-rK8"/>
                             <constraint firstItem="hzw-Uf-hhT" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="hDy-UE-cIe"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="gQ5-ss-O2a" secondAttribute="trailing" id="rwO-34-t0u"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="LZZ-s1-DAP"/>

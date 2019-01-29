@@ -8,332 +8,6 @@
 
 import UIKit
 
-// MARK: - FlowLayoutProtocol
-@objc public protocol FlowLayoutProtocol {
-    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize
-    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets
-    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
-    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
-    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize
-    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize
-    @objc optional func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView
-    @objc optional func collectionView(_ collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: IndexPath) -> Bool
-    @objc optional func collectionView(_ collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: IndexPath, toIndexPath destinationIndexPath: IndexPath)
-    @objc optional func collectionView(_ collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: IndexPath)
-}
-
-// MARK: - EdamameCell
-public protocol EdamameCell {
-    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath)
-    static func sizeForItem(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath) -> CGSize
-}
-
-public protocol EdamameSupplementaryView {
-    func configure(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath)
-    static func sizeForItem(_ item: Any, collectionView: UICollectionView, section: Int) -> CGSize
-}
-
-public extension EdamameCell {
-    static func calculateSize<T: UICollectionViewCell>(_ item: Any, collectionView: UICollectionView, indexPath: IndexPath, cell: T, width: CGFloat? = nil) -> CGSize where T: EdamameCell {
-        let width = width ?? collectionView.frame.size.width
-        let widthConstraint = NSLayoutConstraint(item: cell.contentView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: width)
-        let translatesAutoresizingMaskIntoConstraints = cell.contentView.translatesAutoresizingMaskIntoConstraints
-        cell.contentView.translatesAutoresizingMaskIntoConstraints = false
-        cell.contentView.addConstraint(widthConstraint)
-
-        cell.configure(item, collectionView: collectionView, indexPath: indexPath)
-        cell.bounds = CGRect(x: 0, y: 0, width: width, height: cell.bounds.height)
-        cell.setNeedsLayout()
-        cell.layoutIfNeeded()
-
-        let size = cell.contentView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        cell.contentView.removeConstraint(widthConstraint)
-        cell.contentView.translatesAutoresizingMaskIntoConstraints = translatesAutoresizingMaskIntoConstraints
-
-        return size
-    }
-}
-
-public typealias EdamameSelectionHandler = (_ item: Any, _ indexPath: IndexPath) -> Void
-class EdamameItem {
-    var item: Any
-    var cellType: UICollectionViewCell.Type
-    var size: CGSize = CGSize.zero
-    var needsLayout: Bool = true
-    var calculateSizeInBackground: Bool = false
-    var selectionHandler: EdamameSelectionHandler?
-    var isFirstAppearing: Bool = true
-
-    init(item: Any, cellType: UICollectionViewCell.Type, calculateSizeInBackground: Bool = false, selection: EdamameSelectionHandler? = nil) {
-        self.item = item
-        self.cellType = cellType
-        self.calculateSizeInBackground = calculateSizeInBackground
-        self.selectionHandler = selection
-    }
-}
-
-class EdamameSupplementaryItem {
-    var item: Any
-    var viewType: UICollectionReusableView.Type
-    var size: CGSize = CGSize.zero
-    var needsLayout: Bool = true
-    var isFirstAppearing: Bool = true
-
-    init(item: Any, viewType: UICollectionReusableView.Type) {
-        self.item = item
-        self.viewType = viewType
-    }
-}
-
-// MARK: - EdamameSection
-open class EdamameSection {
-    fileprivate weak var dataSource: Edamame!
-    fileprivate var items = [EdamameItem]()
-    fileprivate var supplementaryItems = [String: EdamameSupplementaryItem]()
-    fileprivate var cellType: UICollectionViewCell.Type
-    
-    open var numberOfItems: Int {
-        return items.count
-    }
-
-    open var numberOfVisibleItems: Int {
-        return hidden ? 0 : items.count
-    }
-
-    open var index: Int {
-        for (index, section) in dataSource.sections.enumerated() {
-            if section === self {
-                return index
-            }
-        }
-        return 0
-    }
-    open var hidden: Bool = false {
-        didSet {
-            self.dataSource?.setNeedsLayout()
-        }
-    }
-    open var inset: UIEdgeInsets?
-    open var minimumLineSpacing: CGFloat?
-    open var minimumInteritemSpacing: CGFloat?
-
-    public init(cellType: UICollectionViewCell.Type? = nil) {
-        self.cellType = cellType ?? UICollectionViewCell.self
-    }
-
-    open func items<T>(_ type: T.Type) -> [T] {
-        return self.items.filter({$0.item is T}).map({$0.item as! T})
-    }
-}
-
-// MARK: Public Methods
-public extension EdamameSection {
-    subscript(index: Int) -> Any {
-        get {
-            return items[index].item
-        }
-    }
-
-    subscript(kind: String) -> Any? {
-        get {
-            return supplementaryItems[kind]?.item
-        }
-    }
-
-    func itemIndexOf<T: Equatable>(_ item: T) -> Int? {
-        return self.items.firstIndex(where: { (edamameItem) -> Bool in
-            guard let existItem = edamameItem.item as? T else { return false }
-            return existItem == item
-        })
-    }
-
-    func itemIndexOf<T>(_ type: T.Type, where: (T) -> Bool) -> Int? {
-        return self.items.firstIndex(where: { (edamameItem) -> Bool in
-            guard let existItem = edamameItem.item as? T else { return false }
-            return `where`(existItem)
-        })
-    }
-
-    func itemIndexOf<T>(where: (T) -> Bool) -> Int? {
-        return self.items.firstIndex(where: { (edamameItem) -> Bool in
-            guard let existItem = edamameItem.item as? T else { return false }
-            return `where`(existItem)
-        })
-    }
-
-    func setCellType<T: UICollectionViewCell>(_ cellType: T.Type) {
-        self.cellType = cellType
-    }
-
-    func setCellType<T: UICollectionViewCell, I: Equatable>(_ cellType: T.Type, forItem item: I) {
-        for cellItem in items {
-            if let _item = cellItem.item as? I, _item == item {
-                cellItem.cellType = cellType
-            }
-        }
-    }
-
-    func setCellType<T: UICollectionViewCell>(_ cellType: T.Type, forItemAt index: Int) {
-        if items.count > index {
-            items[index].cellType = cellType
-        }
-    }
-
-    func appendItem(_ item: Any, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
-        let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
-        dataSource?._updates.append(.append(item: item, section: index))
-    }
-
-    func insertItem(_ item: Any, atIndex: Int, cellType: UICollectionViewCell.Type? = nil, calculateSizeInBackground:Bool = false, selection: EdamameSelectionHandler? = nil) {
-        let item = EdamameItem(item: item, cellType: cellType ?? self.cellType, calculateSizeInBackground: calculateSizeInBackground, selection: selection)
-        dataSource?._updates.append(.insert(item: item, indexPath: IndexPath(item: atIndex, section: index)))
-    }
-
-    func appendSupplementaryItem(_ item: Any, kind: String, viewType: UICollectionReusableView.Type? = nil) {
-        let item = EdamameSupplementaryItem(item: item, viewType: viewType ?? self.cellType)
-        dataSource?._updates.append(.appendSupplementary(item: item, kind: kind, section: index))
-    }
-
-    func removeItemAtIndex(_ index: Int) {
-        let indexPath = IndexPath(item: index, section: self.index)
-        dataSource?._updates.append(.delete(indexPaths: [indexPath]))
-    }
-
-    func removeItems<T>(type: T.Type) {
-        var removeIndexPaths: [IndexPath] = []
-        removeIndexPaths = self.items.enumerated().filter({ $0.1.item is T }).map({ IndexPath(item: $0.0, section: self.index) })
-        if removeIndexPaths.count > 0 {
-            dataSource?._updates.append(.delete(indexPaths: removeIndexPaths))
-        }
-    }
-
-    func removeAllItems() {
-        guard items.count > 0 else { return }
-        var indexPaths: [IndexPath] = []
-        for i in 0..<items.count {
-            indexPaths.append(IndexPath(item: i, section: index))
-        }
-        dataSource?._updates.append(.delete(indexPaths: indexPaths))
-    }
-
-    func removeSupplementaryItem(_ kind: String) {
-        dataSource?._updates.append(.deleteSupplementary(kind: kind, section: index))
-        self.dataSource.collectionView.collectionViewLayout.invalidateLayout()
-    }
-
-    func removeAllSupplementaryItems() {
-        for (kind, _) in supplementaryItems {
-            self.supplementaryItems[kind] = nil
-            dataSource?._updates.append(.deleteSupplementary(kind: kind, section: index))
-        }
-    }
-
-    func reloadData(animated: Bool = false) {
-        dataSource.reloadSection(section: index, animated: animated)
-    }
-}
-
-// MARK: DataSource
-extension EdamameSection {
-    func numberOfItemsInCollectionView(_ collectionView: UICollectionView) -> Int {
-        return numberOfVisibleItems
-    }
-}
-
-// MARK: FLowLayout
-extension EdamameSection : FlowLayoutProtocol {
-    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAtIndexPath indexPath: IndexPath) -> UICollectionViewCell {
-        let item = items[indexPath.item]
-        let cell = dataSource.dequeueReusableCell(item.cellType.self, forIndexPath: indexPath)
-        if let cell = cell as? EdamameCell {
-            cell.configure(item.item, collectionView: collectionView, indexPath: indexPath)
-            item.isFirstAppearing = false
-        }
-        return cell
-    }
-
-    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
-        guard !self.hidden else { return CGSize.zero }
-        guard items.count > indexPath.item else { return CGSize.zero }
-        let item = items[indexPath.item]
-        if item.needsLayout && !item.calculateSizeInBackground {
-            if let cellType = item.cellType as? EdamameCell.Type {
-                item.size = cellType.sizeForItem(item.item, collectionView: collectionView, indexPath: indexPath)
-                item.needsLayout = false
-            }
-        }
-        return item.size
-    }
-
-    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize.zero }
-        guard let item = self.supplementaryItems[UICollectionView.elementKindSectionHeader] else { return CGSize.zero }
-        if item.needsLayout {
-            if let viewType = item.viewType as? EdamameSupplementaryView.Type {
-                item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
-                item.needsLayout = false
-            }
-        }
-        return item.size
-    }
-
-    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard !self.hidden else { return CGSize.zero }
-        guard let item = self.supplementaryItems[UICollectionView.elementKindSectionFooter] else { return CGSize.zero }
-        if item.needsLayout {
-            if let viewType = item.viewType as? EdamameSupplementaryView.Type {
-                item.size = viewType.sizeForItem(item.item, collectionView: collectionView, section: section)
-                item.needsLayout = false
-            }
-        }
-        return item.size
-    }
-
-    @objc public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView {
-        guard let item = supplementaryItems[kind] else {
-            return dataSource.dequeueReusableCell(kind, withReuseType: UICollectionReusableView.self, forIndexPath: indexPath)
-        }
-        let view = dataSource.dequeueReusableCell(kind, withReuseType: item.viewType, forIndexPath: indexPath)
-        if let view = view as? EdamameSupplementaryView {
-            view.configure(item.item, collectionView: collectionView, indexPath: indexPath)
-            item.isFirstAppearing = false
-        }
-        return view
-    }
-    
-    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        if self.hidden {
-            return UIEdgeInsets.zero
-        }
-        if let inset = inset {
-            return inset
-        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.sectionInset
-        }
-        return UIEdgeInsets.zero
-    }
-
-    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat {
-        if let minimumLineSpacing = self.minimumLineSpacing {
-            return minimumLineSpacing
-        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.minimumLineSpacing
-        } else {
-            return 0
-        }
-    }
-    @objc public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat {
-        if let minimumInteritemSpacing = self.minimumInteritemSpacing {
-            return minimumInteritemSpacing
-        } else if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
-            return layout.minimumInteritemSpacing
-        } else {
-            return 0
-        }
-    }
-}
-
-// MARK: - Edamame
 open class Edamame: NSObject {
 
     enum UpdateType {
@@ -344,33 +18,12 @@ open class Edamame: NSObject {
         case deleteSupplementary(kind: String, section: Int)
     }
 
-    /// readonly
-    fileprivate let _calculateSizeQueue = DispatchQueue(label: "matzo.Edamame", attributes: [])
-    fileprivate var _collectionView: UICollectionView
-    fileprivate var _sections = [EdamameSection]()
-    fileprivate var _updates: [UpdateType] = []
+    // readonly
+    internal var _collectionView: UICollectionView
+    internal var _sections = [EdamameSection]()
+    internal var _updates: [UpdateType] = []
 
     // public
-    var hasAcyncSizingItem: Bool {
-        for update in _updates {
-            switch update {
-            case .append(let item, _):
-                if item.calculateSizeInBackground && item.needsLayout {
-                    return true
-                }
-            case .insert(let item, _):
-                if item.calculateSizeInBackground && item.needsLayout {
-                    return true
-                }
-            case .delete(_):
-                break
-            case .appendSupplementary(_, _, _), .deleteSupplementary(_, _):
-                break
-            }
-        }
-        return false
-    }
-
     override init() {
         fatalError("required collectionView")
     }
@@ -464,7 +117,6 @@ public extension Edamame {
                     supplementaryItem.needsLayout = true
                 }
             }
-            self.calculateSizeInBackground()
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
         if animated {
@@ -483,7 +135,6 @@ public extension Edamame {
 
         let block = {
             self.sections[indexPath.section].items[indexPath.item].needsLayout = true
-            self.calculateSizeInBackground()
             self.collectionView.collectionViewLayout.invalidateLayout()
         }
         if animated {
@@ -497,9 +148,8 @@ public extension Edamame {
     }
 
     func reloadData(animated: Bool = false) {
-        self.calculateSizeInBackground()
         self.reloadHiddenSections()
-        if animated && !hasAcyncSizingItem {
+        if animated {
             self.collectionView.performBatchUpdates({
                 self.applyUpdatesAnimating()
             }, completion: { (done) in
@@ -663,7 +313,7 @@ public extension Edamame {
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
 
-    private func itemsCount(indexPaths: [IndexPath], inSection section: Int) -> Int {
+    internal func itemsCount(indexPaths: [IndexPath], inSection section: Int) -> Int {
         return indexPaths.filter({ $0.section == section }).count
     }
 
@@ -698,35 +348,6 @@ public extension Edamame {
 
     func removeSection(index: Int, animated: Bool = false) {
         self.removeSections(indexSet: [index], animated: animated)
-    }
-
-    func calculateSizeInBackground() {
-        if !hasAcyncSizingItem {
-            return
-        }
-        _calculateSizeQueue.async { () -> Void in
-            var needsReload = false
-            for sectionIndex in 0..<self.sections.count {
-                let section = self.sections[sectionIndex]
-                for itemIndex in 0..<section.items.count {
-                    let item = section.items[itemIndex]
-                    guard item.calculateSizeInBackground && item.needsLayout else { continue }
-
-                    if let cellType = item.cellType as? EdamameCell.Type {
-                        let indexPath = IndexPath(item: sectionIndex, section: itemIndex)
-                        item.size = cellType.sizeForItem(item.item, collectionView: self.collectionView, indexPath: indexPath)
-                        item.needsLayout = false
-                        needsReload = true
-                    }
-                }
-            }
-
-            if needsReload {
-                DispatchQueue.main.sync(execute: { () -> Void in
-                    self.collectionView.reloadData()
-                })
-            }
-        }
     }
 }
 
@@ -844,6 +465,20 @@ public extension Edamame {
         return collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                withReuseIdentifier: String(describing: type), for: indexPath) as! T
     }
+}
+
+// MARK: - FlowLayoutProtocol
+@objc public protocol FlowLayoutProtocol {
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize
+    @objc optional func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize
+    @objc optional func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: IndexPath) -> UICollectionReusableView
+    @objc optional func collectionView(_ collectionView: UICollectionView, canMoveItemAtIndexPath indexPath: IndexPath) -> Bool
+    @objc optional func collectionView(_ collectionView: UICollectionView, moveItemAtIndexPath sourceIndexPath: IndexPath, toIndexPath destinationIndexPath: IndexPath)
+    @objc optional func collectionView(_ collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: IndexPath)
 }
 
 // MARK: - UICollectionView

@@ -14,22 +14,20 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		6464BC0361D1347F6521A362 /* Pods_Edamame_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF49099DD3BF086FE6B1700B /* Pods_Edamame_Example.framework */; };
-		E0F97A531F626636005D1B39 /* RxDemoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F97A511F626636005D1B39 /* RxDemoHeaderCell.swift */; };
-		E0F97A541F626636005D1B39 /* RxDemoHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E0F97A521F626636005D1B39 /* RxDemoHeaderCell.xib */; };
+		E03CE88222001F78007D3A45 /* ModifyDemoHeaderCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E03CE87C22001F77007D3A45 /* ModifyDemoHeaderCell.xib */; };
+		E03CE88322001F78007D3A45 /* ModifyDemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03CE87D22001F77007D3A45 /* ModifyDemoCell.swift */; };
+		E03CE88422001F78007D3A45 /* ModifyDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03CE87E22001F77007D3A45 /* ModifyDemoViewController.swift */; };
+		E03CE88522001F78007D3A45 /* ModifyDemoHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03CE87F22001F77007D3A45 /* ModifyDemoHeaderCell.swift */; };
+		E03CE88622001F78007D3A45 /* ModifyDemoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E03CE88022001F77007D3A45 /* ModifyDemoCell.xib */; };
+		E03CE88722001F78007D3A45 /* ModifyDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E03CE88122001F77007D3A45 /* ModifyDemoViewController.xib */; };
 		F721F1F41C83166F00A7CEC0 /* DemoDynamicHeightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F721F1F21C83166F00A7CEC0 /* DemoDynamicHeightCell.swift */; };
 		F721F1F51C83166F00A7CEC0 /* DemoDynamicHeightCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F721F1F31C83166F00A7CEC0 /* DemoDynamicHeightCell.xib */; };
-		F721F1F81C83399700A7CEC0 /* DemoCalcBackgroundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F721F1F61C83399700A7CEC0 /* DemoCalcBackgroundCell.swift */; };
-		F721F1F91C83399700A7CEC0 /* DemoCalcBackgroundCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F721F1F71C83399700A7CEC0 /* DemoCalcBackgroundCell.xib */; };
 		F77B3A1C1C7B7924001CD511 /* DemoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */; };
 		F77B3A1E1C7B79FB001CD511 /* DemoHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */; };
 		F7C145121C70644A0046B4E0 /* DemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C1450E1C70644A0046B4E0 /* DemoCell.swift */; };
 		F7C145131C70644A0046B4E0 /* DemoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C1450F1C70644A0046B4E0 /* DemoCell.xib */; };
 		F7C145141C70644A0046B4E0 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7C145101C70644A0046B4E0 /* DemoViewController.swift */; };
 		F7C145151C70644A0046B4E0 /* DemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7C145111C70644A0046B4E0 /* DemoViewController.xib */; };
-		F7F311671CD600C100A57C63 /* RxDemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F311651CD600C100A57C63 /* RxDemoCell.swift */; };
-		F7F311681CD600C100A57C63 /* RxDemoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7F311661CD600C100A57C63 /* RxDemoCell.xib */; };
-		F7F3116C1CD7284100A57C63 /* RxDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7F3116A1CD7284100A57C63 /* RxDemoViewController.swift */; };
-		F7F3116D1CD7284100A57C63 /* RxDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F7F3116B1CD7284100A57C63 /* RxDemoViewController.xib */; };
 		F943BAE49BFDB60B0B5012A7 /* Pods_Edamame_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C745142774699748713D4AEF /* Pods_Edamame_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -61,22 +59,20 @@
 		C745142774699748713D4AEF /* Pods_Edamame_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Edamame_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB48CC5A7BDFA766D0FA059E /* Pods-Edamame_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Edamame_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Edamame_Tests/Pods-Edamame_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		DBDB6FAE106C4B91ECB3004A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		E0F97A511F626636005D1B39 /* RxDemoHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxDemoHeaderCell.swift; path = RxSwiftDemo/RxDemoHeaderCell.swift; sourceTree = "<group>"; };
-		E0F97A521F626636005D1B39 /* RxDemoHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RxDemoHeaderCell.xib; path = RxSwiftDemo/RxDemoHeaderCell.xib; sourceTree = "<group>"; };
+		E03CE87C22001F77007D3A45 /* ModifyDemoHeaderCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModifyDemoHeaderCell.xib; sourceTree = "<group>"; };
+		E03CE87D22001F77007D3A45 /* ModifyDemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModifyDemoCell.swift; sourceTree = "<group>"; };
+		E03CE87E22001F77007D3A45 /* ModifyDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModifyDemoViewController.swift; sourceTree = "<group>"; };
+		E03CE87F22001F77007D3A45 /* ModifyDemoHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModifyDemoHeaderCell.swift; sourceTree = "<group>"; };
+		E03CE88022001F77007D3A45 /* ModifyDemoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModifyDemoCell.xib; sourceTree = "<group>"; };
+		E03CE88122001F77007D3A45 /* ModifyDemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ModifyDemoViewController.xib; sourceTree = "<group>"; };
 		F721F1F21C83166F00A7CEC0 /* DemoDynamicHeightCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoDynamicHeightCell.swift; sourceTree = "<group>"; };
 		F721F1F31C83166F00A7CEC0 /* DemoDynamicHeightCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoDynamicHeightCell.xib; sourceTree = "<group>"; };
-		F721F1F61C83399700A7CEC0 /* DemoCalcBackgroundCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoCalcBackgroundCell.swift; sourceTree = "<group>"; };
-		F721F1F71C83399700A7CEC0 /* DemoCalcBackgroundCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoCalcBackgroundCell.xib; sourceTree = "<group>"; };
 		F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoHeaderView.swift; sourceTree = "<group>"; };
 		F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoHeaderView.xib; sourceTree = "<group>"; };
 		F7C1450E1C70644A0046B4E0 /* DemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoCell.swift; sourceTree = "<group>"; };
 		F7C1450F1C70644A0046B4E0 /* DemoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoCell.xib; sourceTree = "<group>"; };
 		F7C145101C70644A0046B4E0 /* DemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 		F7C145111C70644A0046B4E0 /* DemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DemoViewController.xib; sourceTree = "<group>"; };
-		F7F311651CD600C100A57C63 /* RxDemoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxDemoCell.swift; path = RxSwiftDemo/RxDemoCell.swift; sourceTree = "<group>"; };
-		F7F311661CD600C100A57C63 /* RxDemoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RxDemoCell.xib; path = RxSwiftDemo/RxDemoCell.xib; sourceTree = "<group>"; };
-		F7F3116A1CD7284100A57C63 /* RxDemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RxDemoViewController.swift; path = RxSwiftDemo/RxDemoViewController.swift; sourceTree = "<group>"; };
-		F7F3116B1CD7284100A57C63 /* RxDemoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RxDemoViewController.xib; path = RxSwiftDemo/RxDemoViewController.xib; sourceTree = "<group>"; };
 		F98F45A08819BDD96DAA8CE0 /* Pods-Edamame_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Edamame_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Edamame_Tests/Pods-Edamame_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		FE986DA745AD6DD024D08FDB /* Edamame.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Edamame.podspec; path = ../Edamame.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,7 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				F7C1450D1C70644A0046B4E0 /* SimpleDemo */,
-				F7F311691CD7281000A57C63 /* RxSwiftDemo */,
+				E03CE87B22001F77007D3A45 /* ModifyDemo */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -193,6 +189,19 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		E03CE87B22001F77007D3A45 /* ModifyDemo */ = {
+			isa = PBXGroup;
+			children = (
+				E03CE87D22001F77007D3A45 /* ModifyDemoCell.swift */,
+				E03CE88022001F77007D3A45 /* ModifyDemoCell.xib */,
+				E03CE87E22001F77007D3A45 /* ModifyDemoViewController.swift */,
+				E03CE88122001F77007D3A45 /* ModifyDemoViewController.xib */,
+				E03CE87F22001F77007D3A45 /* ModifyDemoHeaderCell.swift */,
+				E03CE87C22001F77007D3A45 /* ModifyDemoHeaderCell.xib */,
+			);
+			path = ModifyDemo;
+			sourceTree = "<group>";
+		};
 		F7C1450D1C70644A0046B4E0 /* SimpleDemo */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,27 +209,12 @@
 				F7C1450F1C70644A0046B4E0 /* DemoCell.xib */,
 				F721F1F21C83166F00A7CEC0 /* DemoDynamicHeightCell.swift */,
 				F721F1F31C83166F00A7CEC0 /* DemoDynamicHeightCell.xib */,
-				F721F1F61C83399700A7CEC0 /* DemoCalcBackgroundCell.swift */,
-				F721F1F71C83399700A7CEC0 /* DemoCalcBackgroundCell.xib */,
 				F77B3A1B1C7B7924001CD511 /* DemoHeaderView.swift */,
 				F77B3A1D1C7B79FB001CD511 /* DemoHeaderView.xib */,
 				F7C145101C70644A0046B4E0 /* DemoViewController.swift */,
 				F7C145111C70644A0046B4E0 /* DemoViewController.xib */,
 			);
 			path = SimpleDemo;
-			sourceTree = "<group>";
-		};
-		F7F311691CD7281000A57C63 /* RxSwiftDemo */ = {
-			isa = PBXGroup;
-			children = (
-				F7F311651CD600C100A57C63 /* RxDemoCell.swift */,
-				F7F311661CD600C100A57C63 /* RxDemoCell.xib */,
-				F7F3116A1CD7284100A57C63 /* RxDemoViewController.swift */,
-				F7F3116B1CD7284100A57C63 /* RxDemoViewController.xib */,
-				E0F97A511F626636005D1B39 /* RxDemoHeaderCell.swift */,
-				E0F97A521F626636005D1B39 /* RxDemoHeaderCell.xib */,
-			);
-			name = RxSwiftDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -312,16 +306,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				F7C145151C70644A0046B4E0 /* DemoViewController.xib in Resources */,
-				F721F1F91C83399700A7CEC0 /* DemoCalcBackgroundCell.xib in Resources */,
 				F721F1F51C83166F00A7CEC0 /* DemoDynamicHeightCell.xib in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
-				F7F311681CD600C100A57C63 /* RxDemoCell.xib in Resources */,
 				F7C145131C70644A0046B4E0 /* DemoCell.xib in Resources */,
-				E0F97A541F626636005D1B39 /* RxDemoHeaderCell.xib in Resources */,
+				E03CE88222001F78007D3A45 /* ModifyDemoHeaderCell.xib in Resources */,
+				E03CE88622001F78007D3A45 /* ModifyDemoCell.xib in Resources */,
 				F77B3A1E1C7B79FB001CD511 /* DemoHeaderView.xib in Resources */,
-				F7F3116D1CD7284100A57C63 /* RxDemoViewController.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				E03CE88722001F78007D3A45 /* ModifyDemoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,14 +413,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7F311671CD600C100A57C63 /* RxDemoCell.swift in Sources */,
-				F721F1F81C83399700A7CEC0 /* DemoCalcBackgroundCell.swift in Sources */,
-				F7F3116C1CD7284100A57C63 /* RxDemoViewController.swift in Sources */,
 				F721F1F41C83166F00A7CEC0 /* DemoDynamicHeightCell.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				E03CE88522001F78007D3A45 /* ModifyDemoHeaderCell.swift in Sources */,
 				F77B3A1C1C7B7924001CD511 /* DemoHeaderView.swift in Sources */,
+				E03CE88422001F78007D3A45 /* ModifyDemoViewController.swift in Sources */,
 				F7C145141C70644A0046B4E0 /* DemoViewController.swift in Sources */,
-				E0F97A531F626636005D1B39 /* RxDemoHeaderCell.swift in Sources */,
+				E03CE88322001F78007D3A45 /* ModifyDemoCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				F7C145121C70644A0046B4E0 /* DemoCell.swift in Sources */,
 			);

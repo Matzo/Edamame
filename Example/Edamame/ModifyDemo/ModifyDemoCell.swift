@@ -1,5 +1,5 @@
 //
-//  RxDemoCell.swift
+//  ModifyDemoCell.swift
 //  Edamame
 //
 //  Created by Matsuo Keisuke on 5/1/16.
@@ -11,9 +11,9 @@ import Edamame
 import RxSwift
 import RxCocoa
 
-class RxDemoCell: UICollectionViewCell, EdamameCell {
+class ModifyDemoCell: UICollectionViewCell, EdamameCell {
     
-    static let viewHolder = UINib(nibName: String(describing: RxDemoCell.self), bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! RxDemoCell
+    static let viewHolder = UINib(nibName: String(describing: ModifyDemoCell.self), bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ModifyDemoCell
     
     var disposeBag = DisposeBag()
     

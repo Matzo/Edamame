@@ -26,7 +26,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func openRxDemoViewController() {
-        let vc = RxDemoViewController()
+        let vc = ModifyDemoViewController()
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

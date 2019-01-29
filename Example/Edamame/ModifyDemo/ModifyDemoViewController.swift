@@ -1,5 +1,5 @@
 //
-//  RxDemoViewController.swift
+//  ModifyDemoViewController.swift
 //  Edamame
 //
 //  Created by Matsuo Keisuke on 5/2/16.
@@ -10,7 +10,7 @@ import UIKit
 import Edamame
 import RxSwift
 
-class RxDemoViewController: UIViewController {
+class ModifyDemoViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
@@ -101,24 +101,24 @@ class RxDemoViewModel: Edamame {
     func loadData(_ completion:(_ users: [RxUser]) -> Void) {
         var users = [RxUser]()
         for _ in 1...1 {
-            users.append(RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
-            users.append(RxUser(name: "bar", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
-            users.append(RxUser(name: "hoge", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
-            users.append(RxUser(name: "fuga", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments"))
+            users.append(RxUser(name: "foo", message: "tap me!"))
+            users.append(RxUser(name: "bar", message: "tap me!"))
+            users.append(RxUser(name: "hoge", message: "tap me!"))
+            users.append(RxUser(name: "fuga", message: "tap me!"))
         }
         completion(users)
     }
 
     func setup() {
-        self.registerNibFromClass(RxDemoCell.self)
-        self.registerNibFromClass(RxDemoHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        self.registerNibFromClass(ModifyDemoCell.self)
+        self.registerNibFromClass(ModifyDemoHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
 
         self.loadData { (users) -> Void in
             let section = self.createSection()
             section.minimumLineSpacing = 0
             section.minimumInteritemSpacing = 0
             for user in users {
-                section.appendItem(user, cellType: RxDemoCell.self) { [weak self] (item, indexPath) -> Void in
+                section.appendItem(user, cellType: ModifyDemoCell.self) { [weak self] (item, indexPath) -> Void in
                     guard let user = item as? RxUser else { return }
                     self?.didTapUser(user: user)
                 }
@@ -149,10 +149,10 @@ class RxDemoViewModel: Edamame {
 
     func deleteAllAndAddItems(section: Int = 0) {
         let section = self[section]
-        let item = RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments")
+        let item = RxUser(name: "foo", message: "tap me!")
         section.removeAllItems()
-        section.appendItem(item, cellType: RxDemoCell.self)
-        section.appendItem(item, cellType: RxDemoCell.self)
+        section.appendItem(item, cellType: ModifyDemoCell.self)
+        section.appendItem(item, cellType: ModifyDemoCell.self)
         self.reloadData(animated: true)
     }
 
@@ -166,8 +166,8 @@ class RxDemoViewModel: Edamame {
 
     func appendItem(section: Int = 0) {
         let section = self[section]
-        let item = RxUser(name: "foo", message: "Rx, reactive extensions, originally for .NET, later ported to other languages and environments")
-        section.appendItem(item, cellType: RxDemoCell.self) { [weak self] (item, indexPath) -> Void in
+        let item = RxUser(name: "foo", message: "tap me!")
+        section.appendItem(item, cellType: ModifyDemoCell.self) { [weak self] (item, indexPath) -> Void in
             guard let user = item as? RxUser else { return }
             self?.didTapUser(user: user)
         }
@@ -194,7 +194,7 @@ class RxDemoViewModel: Edamame {
 
     func addHeader(section: Int = 0) {
         let section = self[section]
-        section.appendSupplementaryItem("Section \(section.index) Header", kind: UICollectionView.elementKindSectionHeader, viewType: RxDemoHeaderCell.self)
+        section.appendSupplementaryItem("Section \(section.index) Header", kind: UICollectionView.elementKindSectionHeader, viewType: ModifyDemoHeaderCell.self)
     }
 
     func deleteHeader(section: Int = 0) {

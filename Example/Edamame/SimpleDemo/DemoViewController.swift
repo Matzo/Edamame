@@ -31,12 +31,18 @@ class DemoViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.dataSource.setup()
+        dataSource.sections.forEach { (section) in
+            section.cellConfigureHandler = { (item, collectionView, cell, indexPath) in
+                print(indexPath)
+            }
+        }
+
         self.setupButton()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         self.dataSource.setNeedsLayout()
     }
     
@@ -81,7 +87,6 @@ class DemoViewModel: Edamame {
     func setup() {
         self.registerNibFromClass(DemoCell.self)
         self.registerNibFromClass(DemoDynamicHeightCell.self)
-        self.registerNibFromClass(DemoCalcBackgroundCell.self)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         self.registerNibFromClass(DemoHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
         
@@ -93,25 +98,6 @@ class DemoViewModel: Edamame {
             section.appendSupplementaryItem("Footer Name", kind: UICollectionView.elementKindSectionFooter, viewType: DemoHeaderView.self)
             for user in users {
                 section.appendItem(user)
-            }
-            
-            self.reloadData()
-        }
-        
-        // Calculate in background Demo
-        self.loadData { (users) -> Void in
-            let section = self[1]
-            section.setCellType(DemoCell.self)
-            section.appendSupplementaryItem("Title Name", kind: UICollectionView.elementKindSectionHeader, viewType: DemoHeaderView.self)
-            section.appendSupplementaryItem("Footer Name", kind: UICollectionView.elementKindSectionFooter, viewType: DemoHeaderView.self)
-            
-            let text = "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda."
-            
-            for _ in 0..<5 {
-                section.appendItem(text, cellType: DemoCalcBackgroundCell.self, calculateSizeInBackground: true) { (item, indexPath) -> Void in
-                    guard let item = item as? String else { return }
-                    print(item)
-                }
             }
             
             self.reloadData()

@@ -1,5 +1,5 @@
 //
-//  RxDemoHeaderCell.swift
+//  ModifyDemoHeaderCell.swift
 //  Edamame
 //
 //  Created by 松尾 圭祐 on 2017/09/08.
@@ -9,7 +9,7 @@
 import UIKit
 import Edamame
 
-class RxDemoHeaderCell: UICollectionViewCell, EdamameSupplementaryView {
+class ModifyDemoHeaderCell: UICollectionViewCell, EdamameSupplementaryView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
